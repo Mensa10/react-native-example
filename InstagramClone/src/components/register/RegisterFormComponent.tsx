@@ -66,7 +66,7 @@ const RegisterFormComponent = (props: any) => (
           <Text style={errorText}>{formikProps.errors.repeatPassword}</Text>
         }
         <TouchableOpacity style={styles.loginButton} onPress={formikProps.handleSubmit as any}>
-          <Text style={styles.loginButtonText}>Register</Text>
+          <Text style={styles.loginButtonText}>REGISTER</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     )}
@@ -89,7 +89,6 @@ const styles = StyleSheet.create({
   loginButtonText: {
     textAlign: 'center',
     color: 'white',
-    textTransform: 'uppercase',
   },
   registerContainer: {
     marginTop: 30,

@@ -1,22 +1,22 @@
 import * as React from 'react';
-import { View, StyleSheet, Image, KeyboardAvoidingView } from 'react-native';
+import { View, StyleSheet, Image, KeyboardAvoidingView, SafeAreaView } from 'react-native';
 
 import LoginFormComponent from './LoginFormComponent';
 const AppLogo = require( '../../assets/app-logo.png');
 
 const LoginComponent = (props: any) => {
-  const redirectToRegister = () => {
-    props.navigation.navigate('Register');
+  const navigate = (route: string) => {
+    props.navigation.navigate(route);
   }
   return (
-    <View style={styles.loginContainer}>
+    <SafeAreaView style={styles.loginContainer}>
       <View style={styles.test}>
         <Image source={AppLogo} style={styles.image} />
         <KeyboardAvoidingView style={styles.formContainer} behavior="padding" enabled>
-          <LoginFormComponent toRegister={redirectToRegister}/>
+          <LoginFormComponent navigate={navigate}/>
         </KeyboardAvoidingView>
       </View>
-    </View>
+    </SafeAreaView>
   )
 };
 
