@@ -1,19 +1,24 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 
 import LoginFormComponent from './LoginFormComponent';
 import AppLogo from '../../assets/app-logo.png';
 
-const LoginComponent = () => (
-  <View style={styles.loginContainer}>
-    <View style={styles.test}>
-      <Image source={AppLogo} style={styles.image}/>
-      <View style={styles.formContainer}>
-        <LoginFormComponent />
+const LoginComponent = (props: any) => {
+  const redirectToRegister = () => {
+    props.navigation.navigate('Register');
+  }
+  return (
+    <View style={styles.loginContainer}>
+      <View style={styles.test}>
+        <Image source={AppLogo} style={styles.image} />
+        <View style={styles.formContainer}>
+          <LoginFormComponent toRegister={redirectToRegister}/>
+        </View>
       </View>
     </View>
-  </View>
-);
+  )
+};
 
 const styles = StyleSheet.create({
   loginContainer: {

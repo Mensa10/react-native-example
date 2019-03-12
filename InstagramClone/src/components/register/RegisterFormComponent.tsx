@@ -4,17 +4,27 @@ import { Formik } from 'formik';
 
 import { formField } from '../../helpers';
 
-interface PropsType {
-  toRegister: () => void;
-}
-
-const LoginFormComponent = (props: PropsType) => (
+const RegisterFormComponent = (props: any) => (
   <Formik
-    initialValues={{ username: '', password: '' }}
+    initialValues={{ firstName: '', lastName: '', username: '', password: '', repeatPassword: '' }}
     onSubmit={values => alert(values.username)}
   >
     {formikProps => (
       <View style={styles.formContainer}>
+        <TextInput
+          onChangeText={formikProps.handleChange('firstName')}
+          onBlur={formikProps.handleBlur('firstName')}
+          value={formikProps.values.firstName}
+          style={styles.textInput}
+          placeholder="First name"
+        />
+         <TextInput
+          onChangeText={formikProps.handleChange('lastName')}
+          onBlur={formikProps.handleBlur('lastName')}
+          value={formikProps.values.lastName}
+          style={styles.textInput}
+          placeholder="Last name"
+        />
         <TextInput
           onChangeText={formikProps.handleChange('username')}
           onBlur={formikProps.handleBlur('username')}
@@ -30,15 +40,17 @@ const LoginFormComponent = (props: PropsType) => (
           placeholder="Password"
           secureTextEntry={true}
         />
+        <TextInput
+          onChangeText={formikProps.handleChange('repeatPassword')}
+          onBlur={formikProps.handleBlur('repeatPassword')}
+          value={formikProps.values.repeatPassword}
+          style={styles.textInput}
+          placeholder="Repeat password"
+          secureTextEntry={true}
+        />
         <TouchableOpacity style={styles.loginButton} onPress={formikProps.handleSubmit as any}>
-          <Text style={styles.loginButtonText}>Login</Text>
+          <Text style={styles.loginButtonText}>Register</Text>
         </TouchableOpacity>
-        <View style={styles.registerContainer}>
-          <Text>If you don't have an account register </Text>
-          <TouchableOpacity onPress={props.toRegister}>
-            <Text style={styles.registerText}>here.</Text>
-          </TouchableOpacity>
-        </View>
       </View>
     )}
   </Formik>
@@ -47,6 +59,7 @@ const LoginFormComponent = (props: PropsType) => (
 const styles = StyleSheet.create({
   formContainer: {
     alignItems: 'center',
+    width: '100%'
   },
   textInput: formField,
   loginButton: {
@@ -70,4 +83,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default LoginFormComponent;
+export default RegisterFormComponent;
