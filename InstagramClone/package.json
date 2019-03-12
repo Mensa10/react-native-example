@@ -13,12 +13,14 @@
     "react": "16.6.3",
     "react-native": "0.58.6",
     "react-native-gesture-handler": "^1.1.0",
+    "react-native-vector-icons": "^6.4.0",
     "react-navigation": "^3.3.2",
     "yup": "^0.26.10"
   },
   "devDependencies": {
     "@types/react": "^16.8.7",
     "@types/react-native": "^0.57.38",
+    "@types/react-native-vector-icons": "^4.6.4",
     "@types/react-navigation": "^3.0.5",
     "@types/yup": "^0.26.12",
     "babel-core": "^7.0.0-bridge.0",
