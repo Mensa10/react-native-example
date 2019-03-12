@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image, KeyboardAvoidingView } from 'react-native';
 
 import LoginFormComponent from './LoginFormComponent';
 const AppLogo = require( '../../assets/app-logo.png');
@@ -12,9 +12,9 @@ const LoginComponent = (props: any) => {
     <View style={styles.loginContainer}>
       <View style={styles.test}>
         <Image source={AppLogo} style={styles.image} />
-        <View style={styles.formContainer}>
+        <KeyboardAvoidingView style={styles.formContainer} behavior="padding" enabled>
           <LoginFormComponent toRegister={redirectToRegister}/>
-        </View>
+        </KeyboardAvoidingView>
       </View>
     </View>
   )

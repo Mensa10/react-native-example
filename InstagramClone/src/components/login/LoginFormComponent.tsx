@@ -24,7 +24,7 @@ const LoginFormComponent = (props: PropsType) => (
           style={styles.textInput}
           placeholder="Username"
         />
-        {formikProps.errors.username && 
+        {formikProps.errors.username && formikProps.touched.username &&
           <Text style={errorText}>{formikProps.errors.username}</Text>
         }
         <TextInput
@@ -35,7 +35,7 @@ const LoginFormComponent = (props: PropsType) => (
           placeholder="Password"
           secureTextEntry={true}
         />
-        {formikProps.errors.password && 
+        {formikProps.errors.password && formikProps.touched.password &&
           <Text style={errorText}>{formikProps.errors.password}</Text>
         }
         <TouchableOpacity style={styles.loginButton} onPress={formikProps.handleSubmit as any}>
