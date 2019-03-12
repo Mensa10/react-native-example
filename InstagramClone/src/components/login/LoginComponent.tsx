@@ -18,21 +18,19 @@ const LoginComponent = () => (
 const styles = StyleSheet.create({
   loginContainer: {
     backgroundColor: '#f1f1f1',
-    height: '100%',
-    width: '100%',
+    flex: 1,
   },
   image: {
     marginTop: 70,
   },
   test: {
-    flexDirection: 'column',
-    height: '70%',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    flex: 1,
+    justifyContent: 'center',
   },
   formContainer: {
-    width: '100%',
     flexDirection: 'column',
+    width: '100%',
   }
 })
 

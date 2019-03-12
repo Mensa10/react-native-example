@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Button, TextInput, View, StyleSheet } from 'react-native';
+import { Text, TextInput, View, StyleSheet, TouchableOpacity, Button } from 'react-native';
 import { Formik } from 'formik';
 
 const LoginFormComponent = () => (
   <Formik
     initialValues={{ username: '', password: '' }}
-    onSubmit={values => console.log(values)}
+    onSubmit={values => alert(values.username)}
   >
     {props => (
       <View style={styles.formContainer}>
@@ -22,8 +22,17 @@ const LoginFormComponent = () => (
           value={props.values.password}
           style={styles.textInput}
           placeholder="Password"
+          secureTextEntry={true}
         />
-        <Button onPress={props.handleSubmit as any} title="Submit" color="red"/>
+        <TouchableOpacity style={styles.loginButton} onPress={props.handleSubmit as any}>
+          <Text style={styles.loginButtonText}>Login</Text>
+        </TouchableOpacity>
+        <View style={styles.registerContainer}>
+          <Text>If you don't have an account register </Text>
+          <TouchableOpacity>
+            <Text style={styles.registerText}>here.</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     )}
   </Formik>
@@ -34,12 +43,33 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   textInput: {
-    width: '50%',
+    width: '80%',
     height: 50,
-    borderBottomColor: 'red'
+    borderBottomColor: 'red',
+    borderRadius: 4,
+    borderWidth: 0.5,
+    borderColor: '#d6d7da',
+    marginBottom: 10,
+    padding: 15,
   },
   loginButton: {
     marginTop: 20,
+    backgroundColor: '#FE697C',
+    padding: 20,
+    width: '50%',
+    borderRadius: 20,
+  },
+  loginButtonText: {
+    textAlign: 'center',
+    color: 'white',
+    textTransform: 'uppercase',
+  },
+  registerContainer: {
+    marginTop: 30,
+    flexDirection: 'row',
+  },
+  registerText: {
+    color: '#FE697C',
   }
 })
 
