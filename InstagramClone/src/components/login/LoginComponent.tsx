@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 
 import LoginFormComponent from './LoginFormComponent';
-import AppLogo from '../../assets/app-logo.png';
+const AppLogo = require( '../../assets/app-logo.png');
 
 const LoginComponent = (props: any) => {
   const redirectToRegister = () => {

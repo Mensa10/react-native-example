@@ -2,7 +2,8 @@ import * as React from 'react';
 import { Text, TextInput, View, StyleSheet, TouchableOpacity, Button } from 'react-native';
 import { Formik } from 'formik';
 
-import { formField } from '../../helpers';
+import { formField, errorText } from '../../helpers';
+import { LoginSchema } from '../../helpers/validations';
 
 interface PropsType {
   toRegister: () => void;
@@ -12,6 +13,7 @@ const LoginFormComponent = (props: PropsType) => (
   <Formik
     initialValues={{ username: '', password: '' }}
     onSubmit={values => alert(values.username)}
+    validationSchema={LoginSchema}
   >
     {formikProps => (
       <View style={styles.formContainer}>
@@ -22,6 +24,9 @@ const LoginFormComponent = (props: PropsType) => (
           style={styles.textInput}
           placeholder="Username"
         />
+        {formikProps.errors.username && 
+          <Text style={errorText}>{formikProps.errors.username}</Text>
+        }
         <TextInput
           onChangeText={formikProps.handleChange('password')}
           onBlur={formikProps.handleBlur('password')}
@@ -30,6 +35,9 @@ const LoginFormComponent = (props: PropsType) => (
           placeholder="Password"
           secureTextEntry={true}
         />
+        {formikProps.errors.password && 
+          <Text style={errorText}>{formikProps.errors.password}</Text>
+        }
         <TouchableOpacity style={styles.loginButton} onPress={formikProps.handleSubmit as any}>
           <Text style={styles.loginButtonText}>Login</Text>
         </TouchableOpacity>
@@ -67,7 +75,8 @@ const styles = StyleSheet.create({
   },
   registerText: {
     color: '#FE697C',
-  }
+  },
+  errorMessage: errorText,
 })
 
 export default LoginFormComponent;

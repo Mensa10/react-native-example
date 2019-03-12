@@ -8,4 +8,10 @@ export const formField = {
     marginBottom: 10,
     padding: 15,
     backgroundColor: 'white'
-}
+};
+
+export const errorText = {
+    color: 'red',
+    marginTop: 10,
+    marginBottom: 10,
+};

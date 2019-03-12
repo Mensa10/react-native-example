@@ -2,12 +2,14 @@ import * as React from 'react';
 import { Text, TextInput, View, StyleSheet, TouchableOpacity, Button } from 'react-native';
 import { Formik } from 'formik';
 
-import { formField } from '../../helpers';
+import { formField, errorText } from '../../helpers';
+import { RegisterSchema } from '../../helpers/validations';
 
 const RegisterFormComponent = (props: any) => (
   <Formik
     initialValues={{ firstName: '', lastName: '', username: '', password: '', repeatPassword: '' }}
     onSubmit={values => alert(values.username)}
+    validationSchema={RegisterSchema}
   >
     {formikProps => (
       <View style={styles.formContainer}>
@@ -18,6 +20,9 @@ const RegisterFormComponent = (props: any) => (
           style={styles.textInput}
           placeholder="First name"
         />
+         {formikProps.errors.firstName && 
+          <Text style={errorText}>{formikProps.errors.firstName}</Text>
+        }
          <TextInput
           onChangeText={formikProps.handleChange('lastName')}
           onBlur={formikProps.handleBlur('lastName')}
@@ -25,6 +30,9 @@ const RegisterFormComponent = (props: any) => (
           style={styles.textInput}
           placeholder="Last name"
         />
+         {formikProps.errors.lastName && 
+          <Text style={errorText}>{formikProps.errors.lastName}</Text>
+        }
         <TextInput
           onChangeText={formikProps.handleChange('username')}
           onBlur={formikProps.handleBlur('username')}
@@ -32,6 +40,9 @@ const RegisterFormComponent = (props: any) => (
           style={styles.textInput}
           placeholder="Username"
         />
+         {formikProps.errors.username && 
+          <Text style={errorText}>{formikProps.errors.username}</Text>
+        }
         <TextInput
           onChangeText={formikProps.handleChange('password')}
           onBlur={formikProps.handleBlur('password')}
@@ -40,6 +51,9 @@ const RegisterFormComponent = (props: any) => (
           placeholder="Password"
           secureTextEntry={true}
         />
+         {formikProps.errors.password && 
+          <Text style={errorText}>{formikProps.errors.password}</Text>
+        }
         <TextInput
           onChangeText={formikProps.handleChange('repeatPassword')}
           onBlur={formikProps.handleBlur('repeatPassword')}
@@ -48,6 +62,9 @@ const RegisterFormComponent = (props: any) => (
           placeholder="Repeat password"
           secureTextEntry={true}
         />
+         {formikProps.errors.repeatPassword && 
+          <Text style={errorText}>{formikProps.errors.repeatPassword}</Text>
+        }
         <TouchableOpacity style={styles.loginButton} onPress={formikProps.handleSubmit as any}>
           <Text style={styles.loginButtonText}>Register</Text>
         </TouchableOpacity>
@@ -80,7 +97,8 @@ const styles = StyleSheet.create({
   },
   registerText: {
     color: '#FE697C',
-  }
+  },
+  errorMessage: errorText,
 })
 
 export default RegisterFormComponent;
