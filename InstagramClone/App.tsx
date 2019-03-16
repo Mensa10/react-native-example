@@ -2,8 +2,8 @@ import * as React from 'react';
 import { createBottomTabNavigator, createAppContainer, createStackNavigator } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import LoginComponent from './src/components/login/LoginComponent';
-import RegisterComponent from './src/components/register/RegisterComponent';
+import LoginComponent from './src/components/auth/LoginComponent';
+import RegisterComponent from './src/components/auth/RegisterComponent';
 import FeedComponent from './src/components/feed/FeedComponent';
 
 const bottomNavigator = createBottomTabNavigator({
