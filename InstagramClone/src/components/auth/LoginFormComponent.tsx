@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, TextInput, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, TextInput, View, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Formik } from 'formik';
 
 import { formField, errorText } from '../../helpers';
@@ -15,7 +15,7 @@ interface PropsType {
   resetError: () => void;
   error: string | null;
   navigate: (route: string) => void;
-
+  isFetching: boolean;
 }
 
 const LoginFormComponent = (props: PropsType) => {
@@ -69,9 +69,16 @@ const LoginFormComponent = (props: PropsType) => {
             {props.error &&
               <Text style={errorText}>{props.error}</Text>
             }
-            <TouchableOpacity style={styles.loginButton} onPress={formikProps.handleSubmit as any}>
-              <Text style={styles.loginButtonText}>LOGIN</Text>
-            </TouchableOpacity>
+            {props.isFetching &&
+              <View style={styles.activityContainer}>
+                <ActivityIndicator size="large" color="#FE697C" />
+              </View>
+            }
+            {!props.isFetching &&
+              <TouchableOpacity style={styles.loginButton} onPress={formikProps.handleSubmit as any}>
+                <Text style={styles.loginButtonText}>LOGIN</Text>
+              </TouchableOpacity>
+            }
             <View style={styles.registerContainer}>
               <Text>If you don't have an account register </Text>
               <TouchableOpacity onPress={toRegister}>
@@ -110,6 +117,9 @@ const styles = StyleSheet.create({
     color: '#FE697C',
   },
   errorMessage: errorText,
+  activityContainer: {
+    marginTop: 20,
+  }
 })
 
 export default LoginFormComponent;

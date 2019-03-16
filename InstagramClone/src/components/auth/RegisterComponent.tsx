@@ -15,6 +15,8 @@ interface PropsType {
   errorMessage: string | null;
 
   resetError: () => void;
+
+  isFetching: boolean;
 }
 
 class RegisterComponent extends React.PureComponent<PropsType, {}> {
@@ -32,6 +34,7 @@ class RegisterComponent extends React.PureComponent<PropsType, {}> {
           submitForm={this.submitForm}
           errorMessage={this.props.errorMessage}
           resetError={this.props.resetError}
+          isFetching={this.props.isFetching}
         />
       </View>
     )
@@ -71,6 +74,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({
 
 const mapStateToProps = (state: GlobalAppStateType) => ({
   errorMessage: state.auth.error,
+  isFetching: state.global.fetching,
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegisterComponent);

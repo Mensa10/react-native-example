@@ -14,6 +14,7 @@ interface PropsType extends NavigationEventsProps {
   loginUser: (user: User, nav: any) => void;
   resetError: () => void;
   error: string | null;
+  isFetching: boolean;
 }
 
 class LoginComponent extends React.PureComponent<PropsType, {}> {
@@ -36,6 +37,7 @@ class LoginComponent extends React.PureComponent<PropsType, {}> {
               loginUser={this.loginUser}
               resetError={this.props.resetError}
               error={this.props.error}
+              isFetching={this.props.isFetching}
             />
           </KeyboardAvoidingView>
         </View>
@@ -65,6 +67,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state: GlobalAppStateType) => ({
   error: state.auth.error,
+  isFetching: state.global.fetching,
 })
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({

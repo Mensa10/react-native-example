@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, TextInput, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { Text, TextInput, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, ActivityIndicator } from 'react-native';
 import { Formik } from 'formik';
 
 import { formField, errorText } from '../../helpers';
@@ -12,6 +12,8 @@ interface PropsType {
   errorMessage: string | null;
 
   resetError: () => void;
+
+  isFetching: boolean;
 }
 
 const RegisterFormComponent = (props: PropsType) => (
@@ -65,9 +67,17 @@ const RegisterFormComponent = (props: PropsType) => (
             <Text style={errorText}>{props.errorMessage}</Text>
 
           }
-          <TouchableOpacity style={styles.loginButton} onPress={formikProps.handleSubmit as any}>
-            <Text style={styles.loginButtonText}>REGISTER</Text>
-          </TouchableOpacity>
+          {props.isFetching &&
+            <View style={styles.activityContainer}>
+              <ActivityIndicator size="large" color="#FE697C" />
+            </View>
+          }
+          {!props.isFetching &&
+            <TouchableOpacity style={styles.loginButton} onPress={formikProps.handleSubmit as any}>
+              <Text style={styles.loginButtonText}>REGISTER</Text>
+            </TouchableOpacity>
+          }
+
         </KeyboardAvoidingView>
       )
     }}
@@ -99,6 +109,9 @@ const styles = StyleSheet.create({
     color: '#FE697C',
   },
   errorMessage: errorText,
+  activityContainer: {
+    marginTop: 20,
+  }
 })
 
 export default RegisterFormComponent;
