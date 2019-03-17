@@ -2,6 +2,7 @@ import * as React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch, AnyAction } from 'redux';
+import { NavigationInjectedProps } from 'react-navigation';
 
 import RegisterFormComponent from './RegisterFormComponent';
 import { User } from '../../helpers/types';
@@ -9,8 +10,8 @@ import { registerUserAction, setErrorMessage } from './actions/authActions';
 import { GlobalAppStateType } from '../../redux/defaultState';
 const appLogo = require('../../assets/app-logo.png');
 
-interface PropsType {
-  registerUser: (user: User) => void;
+interface PropsType extends NavigationInjectedProps {
+  registerUser: (user: User, nav: any) => void;
 
   errorMessage: string | null;
 
@@ -21,7 +22,7 @@ interface PropsType {
 
 class RegisterComponent extends React.PureComponent<PropsType, {}> {
   submitForm = (user: User) => {
-    this.props.registerUser(user);
+    this.props.registerUser(user, this.props.navigation);
   }
   render() {
     return (
@@ -64,8 +65,8 @@ const styles = StyleSheet.create({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({
-  registerUser: (user: User) => {
-    dispatch(registerUserAction(user));
+  registerUser: (user: User, nav: any) => {
+    dispatch(registerUserAction(user, nav));
   },
   resetError: () => {
     dispatch(setErrorMessage(null));

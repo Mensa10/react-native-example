@@ -26,7 +26,7 @@ const setUserToken = (token: string | null, tokenFetch: boolean): SetUserToken =
   tokenFetch,
 })
 
-export const registerUserAction: ActionCreator<any> = (user: User) => {
+export const registerUserAction: ActionCreator<any> = (user: User, nav: any) => {
   return async (dispatch: Dispatch<AnyAction>) => {
     dispatch(toggleIsFetching(true));
     const userDetails = {
@@ -49,7 +49,9 @@ export const registerUserAction: ActionCreator<any> = (user: User) => {
       }
       dispatch(setUserToken(finalRes.idToken, false));
       user.id = finalRes.localId;
+      await storeToken(finalRes.idToken);
       dispatch(loginUser(user))
+      nav.navigate('Feed');
     } catch (error) {
       console.log(error);
       dispatch(toggleIsFetching(false));
