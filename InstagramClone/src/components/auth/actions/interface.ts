@@ -11,6 +11,16 @@ export interface SetErrorMessage {
 
   error: string | null;
 }
+
+export interface SetUserToken {
+  type: 'SET_USER_TOKEN';
+
+  token: string | null;
+
+  tokenFetch: boolean;
+}
+
 export type AuthActionType =
   | RegisterUser
-  | SetErrorMessage;
+  | SetErrorMessage
+  | SetUserToken;

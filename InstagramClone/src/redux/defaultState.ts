@@ -12,6 +12,8 @@ export default {
    user: null,
    firstLogin: false,
    error: null,
+   token: null,
+   tokenFetch: true,
   },
   global: {
     fetching: false,

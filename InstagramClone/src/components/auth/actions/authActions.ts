@@ -2,12 +2,15 @@ import { AnyAction, Dispatch, ActionCreator } from 'redux';
 import * as types from './types';
 import { User } from '../../../helpers/types';
 import { toggleIsFetching } from '../../global/actions/globalActions';
+import { SetUserToken } from './interface';
+import { GlobalAppStateType } from '../../../redux/defaultState';
+import { storeToken, getStoreToken, clearStorage } from '../../../helpers/storage';
 
 const apiKey = 'AIzaSyCU1S31Yfw9qSmxVdNThme3Q_B6uUQfdOg';
 const registerUrl = `https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${apiKey}`;
 const loginUrl = `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${apiKey}`;
 
-const loginUser = (user: User) => ({
+const loginUser = (user: User | null) => ({
   type: types.REGISTER_USER,
   user,
 })
@@ -15,6 +18,12 @@ const loginUser = (user: User) => ({
 export const setErrorMessage = (error: string | null) => ({
   type: types.SET_ERROR_MESSAGE,
   error,
+})
+
+const setUserToken = (token: string | null, tokenFetch: boolean): SetUserToken => ({
+  type: types.SET_USER_TOKEN,
+  token,
+  tokenFetch,
 })
 
 export const registerUserAction: ActionCreator<any> = (user: User) => {
@@ -38,6 +47,7 @@ export const registerUserAction: ActionCreator<any> = (user: User) => {
         }
         return;
       }
+      dispatch(setUserToken(finalRes.idToken, false));
       user.id = finalRes.localId;
       dispatch(loginUser(user))
     } catch (error) {
@@ -71,6 +81,8 @@ export const loginUserAction: ActionCreator<any> = (user: User, nav: any) => {
         }
         return;
       }
+      dispatch(setUserToken(finalRes.idToken, false));
+      await storeToken(finalRes.idToken);
       user.id = finalRes.localId;
       dispatch(loginUser(user))
       nav.navigate('Feed');
@@ -78,5 +90,30 @@ export const loginUserAction: ActionCreator<any> = (user: User, nav: any) => {
       console.log(error);
       dispatch(toggleIsFetching(false));
     }
+  }
+}
+
+
+export const loggedInStatus: ActionCreator<any> = (nav: any) => {
+  return async (dispatch: Dispatch<AnyAction>, getState: () => GlobalAppStateType) => {
+    const token = getState().auth.token;
+    if (!token) {
+      const storeToken = await getStoreToken();
+      dispatch(setUserToken(storeToken, false));
+      if (storeToken) {
+        nav.navigate('Feed');
+        return;
+      }
+    }
+    dispatch(setUserToken(token, false));
+  }
+}
+
+export const logOutUser: ActionCreator<any> = (nav: any) => {
+  return async (dispatch: Dispatch<AnyAction>) => {
+    await clearStorage();
+    dispatch(loginUser(null));
+    dispatch(setUserToken(null, false));
+    nav.navigate('Login');
   }
 }

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, Image, KeyboardAvoidingView, SafeAreaView } from 'react-native';
+import { View, StyleSheet, Image, KeyboardAvoidingView, SafeAreaView, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch, AnyAction } from 'redux';
 import { NavigationEventsProps } from 'react-navigation';
@@ -7,17 +7,32 @@ import { NavigationEventsProps } from 'react-navigation';
 import LoginFormComponent from './LoginFormComponent';
 import { GlobalAppStateType } from '../../redux/defaultState';
 import { User } from '../../helpers/types';
-import { loginUserAction, setErrorMessage } from './actions/authActions';
+import { loginUserAction, setErrorMessage, loggedInStatus } from './actions/authActions';
 const AppLogo = require('../../assets/app-logo.png');
 
 interface PropsType extends NavigationEventsProps {
   loginUser: (user: User, nav: any) => void;
+
   resetError: () => void;
+
   error: string | null;
+
   isFetching: boolean;
+
+  checkLoggedInStatus: (nav: any) => void;
+
+  token: string | null;
+
+  tokenFetch: boolean;
 }
 
-class LoginComponent extends React.PureComponent<PropsType, {}> {
+class LoginComponent extends React.Component<PropsType, {}> {
+
+  componentWillMount(){
+    const { checkLoggedInStatus, navigation } = this.props;
+    checkLoggedInStatus(navigation); 
+  }
+
   navigate = (route: string) => {
     this.props.navigation!.navigate(route);
   }
@@ -27,6 +42,19 @@ class LoginComponent extends React.PureComponent<PropsType, {}> {
   }
 
   render() {
+    const { token, tokenFetch } = this.props;
+    if (tokenFetch && !token) {
+      return (
+        <View style={styles.test}>
+          <ActivityIndicator size="large" color="red" />
+        </View>
+      )
+    }
+
+    if (token) {
+      return null;
+    }
+
     return (
       <SafeAreaView style={styles.loginContainer}>
         <View style={styles.test}>
@@ -58,6 +86,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
+    backgroundColor: '#f1f1f1',
   },
   formContainer: {
     flexDirection: 'column',
@@ -68,6 +97,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state: GlobalAppStateType) => ({
   error: state.auth.error,
   isFetching: state.global.fetching,
+  token: state.auth.token,
+  tokenFetch: state.auth.tokenFetch,
 })
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({
@@ -76,6 +107,9 @@ const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({
   },
   resetError: () => {
     dispatch(setErrorMessage(null));
+  },
+  checkLoggedInStatus: (nav: any) => {
+    dispatch(loggedInStatus(nav))
   }
 })
 

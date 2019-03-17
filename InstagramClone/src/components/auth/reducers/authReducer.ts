@@ -6,8 +6,14 @@ import { User } from '../../../helpers/types';
 
 export interface AuthReducerStateType {
   user: User | null;
+
   firstLogin: boolean;
+
   error: string | null;
+
+  token: string | null;
+
+  tokenFetch: boolean;
 }
 
 export default (
@@ -24,6 +30,12 @@ export default (
     return ({
       ...state,
       error: action.error,
+    })
+    case types.SET_USER_TOKEN: 
+    return ({
+      ...state,
+      token: action.token,
+      tokenFetch: action.tokenFetch,
     })
     default:
       return state;

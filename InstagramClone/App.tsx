@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { createBottomTabNavigator, createAppContainer, createStackNavigator } from 'react-navigation';
+import { createBottomTabNavigator, createAppContainer, createSwitchNavigator } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import LoginComponent from './src/components/auth/LoginComponent';
 import RegisterComponent from './src/components/auth/RegisterComponent';
 import FeedComponent from './src/components/feed/FeedComponent';
+import ProfileComponent from './src/components/profile/ProfileComponent';
 
 const bottomNavigator = createBottomTabNavigator({
   Feed: {
@@ -26,11 +27,11 @@ const bottomNavigator = createBottomTabNavigator({
     }
   },
   Feed3: {
-    screen: FeedComponent,
+    screen: ProfileComponent,
     navigationOptions: {
-      tabBarLabel: 'Settings',
+      tabBarLabel: 'Profile',
       tabBarIcon: ({tintColor} : any) => (
-        <Icon name="ios-settings" color={tintColor} size={24} />
+        <Icon name="ios-person" color={tintColor} size={24} />
       )
     }
   },
@@ -43,12 +44,11 @@ const bottomNavigator = createBottomTabNavigator({
   }
 })
 
-const appStackNavigator = createStackNavigator({
+const appStackNavigator = createSwitchNavigator({
   Login: LoginComponent,
   Register: RegisterComponent,
   Feed: bottomNavigator,
-}, {
-  headerMode: 'none',
 })
+
 
 export default createAppContainer(appStackNavigator);
