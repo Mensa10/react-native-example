@@ -1,12 +1,18 @@
 import * as React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { SafeAreaView, StyleSheet, FlatList } from 'react-native';
 
-class FeedComponent extends React.PureComponent<{},{}> {
-  render () {
+import FeedItemComponent from './FeedItemComponent';
+
+class FeedComponent extends React.PureComponent<{}, {}> {
+  render() {
+    const niz = [{1:1}, {2:2}, {3:3} ,{4:4}, {1:1}, {2:2}, {3:3} ,{4:4}]
     return (
-      <View style={styles.container}>
-        <Text>Feed</Text>
-      </View>
+      <SafeAreaView style={styles.container}>
+        <FlatList 
+          data={niz}
+          renderItem={(item) => <FeedItemComponent />}
+        />
+      </SafeAreaView>
     )
   }
 }
@@ -14,7 +20,7 @@ class FeedComponent extends React.PureComponent<{},{}> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     backgroundColor: 'white'
   }
 });
