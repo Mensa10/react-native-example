@@ -5,10 +5,13 @@ import { toggleIsFetching } from '../../global/actions/globalActions';
 import { SetUserToken } from './interface';
 import { GlobalAppStateType } from '../../../redux/defaultState';
 import { storeToken, getStoreToken, clearStorage } from '../../../helpers/storage';
+import Firebase from '../../../helpers/firebase';
 
 const apiKey = 'AIzaSyCU1S31Yfw9qSmxVdNThme3Q_B6uUQfdOg';
 const registerUrl = `https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${apiKey}`;
 const loginUrl = `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${apiKey}`;
+const updateUserUrl = `https://www.googleapis.com/identitytoolkit/v3/relyingparty/setAccountInfo?key=${apiKey}`
+const getUserDataUrl = `https://www.googleapis.com/identitytoolkit/v3/relyingparty/getAccountInfo?key=${apiKey}`
 
 const loginUser = (user: User | null) => ({
   type: types.REGISTER_USER,
@@ -40,7 +43,6 @@ export const registerUserAction: ActionCreator<any> = (user: User, nav: any) => 
         body: JSON.stringify(userDetails),
       })
       const finalRes = await res.json();
-      dispatch(toggleIsFetching(false));
       if (finalRes.error) {
         if (finalRes.error.message === 'EMAIL_EXISTS') {
           dispatch(setErrorMessage('Email already exists!'))
@@ -48,8 +50,22 @@ export const registerUserAction: ActionCreator<any> = (user: User, nav: any) => 
         return;
       }
       dispatch(setUserToken(finalRes.idToken, false));
-      user.id = finalRes.localId;
+      user.id = finalRes.idToken;
       await storeToken(finalRes.idToken);
+      if (user.profileImage) {
+        const profileImgUrl = await new Firebase().uploadImage(user.profileImage!.uri, 'image/jpeg', `${user.id}-profile`);
+        const updateUser = {
+          idToken: user.id,
+          displayName: 'Mensa10',
+          photoUrl: profileImgUrl,
+          returnSecureToken: true,
+        }
+        await fetch(updateUserUrl, {
+          method: 'POST',
+          body: JSON.stringify(updateUser),
+        })
+      }
+      dispatch(toggleIsFetching(false));
       dispatch(loginUser(user))
       nav.navigate('Feed');
     } catch (error) {
@@ -73,7 +89,6 @@ export const loginUserAction: ActionCreator<any> = (user: User, nav: any) => {
         body: JSON.stringify(userDetails),
       })
       const finalRes = await res.json();
-      dispatch(toggleIsFetching(false));
       if (finalRes.error) {
         if (finalRes.error.message === 'EMAIL_NOT_FOUND') {
           dispatch(setErrorMessage('Email not found!'))
@@ -83,10 +98,22 @@ export const loginUserAction: ActionCreator<any> = (user: User, nav: any) => {
         }
         return;
       }
-      dispatch(setUserToken(finalRes.idToken, false));
       await storeToken(finalRes.idToken);
-      user.id = finalRes.localId;
-      dispatch(loginUser(user))
+      user.id = finalRes.idToken;
+      const getUserData = await fetch(getUserDataUrl, {
+        method: 'POST',
+        body: JSON.stringify({ idToken: user.id }),
+      })
+      const userData = await getUserData.json();
+      
+      const loggedInUser: User = {
+        displayName: userData.users[0].displayName,
+        profileImage: { uri: userData.users[0].photoUrl },
+        ...user,
+      }
+      dispatch(toggleIsFetching(false));
+      dispatch(loginUser(loggedInUser));
+      dispatch(setUserToken(finalRes.idToken, false));
       nav.navigate('Feed');
     } catch (error) {
       console.log(error);
@@ -98,16 +125,30 @@ export const loginUserAction: ActionCreator<any> = (user: User, nav: any) => {
 
 export const loggedInStatus: ActionCreator<any> = (nav: any) => {
   return async (dispatch: Dispatch<AnyAction>, getState: () => GlobalAppStateType) => {
-    const token = getState().auth.token;
+    let token = getState().auth.token;
     if (!token) {
-      const storeToken = await getStoreToken();
-      dispatch(setUserToken(storeToken, false));
-      if (storeToken) {
-        nav.navigate('Feed');
-        return;
+      token = await getStoreToken();
+      dispatch(setUserToken(token, false));
+    }
+
+    if (token) {
+      const getUserData = await fetch(getUserDataUrl, {
+        method: 'POST',
+        body: JSON.stringify({ idToken: token }),
+      })
+      const userData = await getUserData.json();
+      
+      const loggedInUser: User = {
+        displayName: userData.users[0].displayName,
+        profileImage: { uri: userData.users[0].photoUrl },
+        username: userData.users[0].email,
+        password: userData.users[0].passwordHash,
       }
+      dispatch(loginUser(loggedInUser));
+      nav.navigate('Feed');
     }
     dispatch(setUserToken(token, false));
+    return;
   }
 }
 

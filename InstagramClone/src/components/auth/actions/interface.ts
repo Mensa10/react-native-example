@@ -3,7 +3,7 @@ import { User } from '../../../helpers/types'
 export interface RegisterUser {
   type: 'REGISTER_USER';
 
-  data: User;
+  user: User;
 }
 
 export interface SetErrorMessage {

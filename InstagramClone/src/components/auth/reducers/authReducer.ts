@@ -24,7 +24,7 @@ export default (
     case types.REGISTER_USER:
       return ({
         ...state,
-        user: action.data,
+        user: action.user,
       });
     case types.SET_ERROR_MESSAGE:
     return ({

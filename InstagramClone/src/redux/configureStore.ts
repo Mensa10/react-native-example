@@ -8,5 +8,12 @@ export default (initialState: Object) => {
     applyMiddleware(thunk),
   ];
 
-  return createStore(rootReducer, initialState, compose(...enhancers));
+  let composeEnhancers = compose;
+
+  if (__DEV__) {
+    const w = window as any
+    composeEnhancers = w.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+  }
+
+  return createStore(rootReducer, initialState, composeEnhancers(...enhancers));
 };

@@ -1,10 +1,13 @@
 import * as React from 'react';
-import { Text, TextInput, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, ActivityIndicator } from 'react-native';
+import { Text, TextInput, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, ActivityIndicator, Image, Button } from 'react-native';
 import { Formik } from 'formik';
+import ImagePicker from 'react-native-image-picker';
 
 import { formField, errorText } from '../../helpers';
 import { RegisterSchema } from '../../helpers/validations';
 import { User } from '../../helpers/types';
+
+const profilePlaceholder = require('../../assets/profilePlaceholder.jpg');
 
 interface PropsType {
   submitForm: (user: User) => void;
@@ -18,7 +21,7 @@ interface PropsType {
 
 const RegisterFormComponent = (props: PropsType) => (
   <Formik
-    initialValues={{ username: '', password: '', repeatPassword: '' }}
+    initialValues={{ profileImage:profilePlaceholder, username: '', password: '', repeatPassword: '' }}
     onSubmit={values => props.submitForm(values)}
     validationSchema={RegisterSchema}
   >
@@ -29,8 +32,25 @@ const RegisterFormComponent = (props: PropsType) => (
           props.resetError();
         }
       }
+
+      const onProfileImageAction = () => {
+        ImagePicker.showImagePicker({maxWidth: 200, maxHeight: 200}, (res: any) => {
+          if (res.didCancel) {
+            console.log('User canceled');
+          } else if (res.error) {
+            alert(res.error);
+          } else {
+            const source = { uri: res.uri};
+            formikProps.setFieldValue('profileImage', source);
+          }
+        })
+      }
       return (
         <KeyboardAvoidingView style={styles.formContainer} behavior="padding" enabled>
+          <Image source={formikProps.values.profileImage} style={styles.profileImage} />
+          <TouchableOpacity style={styles.uploadImageButton} onPress={onProfileImageAction}>
+              <Text style={styles.loginButtonText}>Add profile image</Text>
+            </TouchableOpacity>
           <TextInput
             onChangeText={usernameOnChange}
             onBlur={formikProps.handleBlur('username')}
@@ -111,7 +131,23 @@ const styles = StyleSheet.create({
   errorMessage: errorText,
   activityContainer: {
     marginTop: 20,
-  }
+  },
+  profileImage: {
+    height: 200,
+    width: 200,
+    borderRadius: 100,
+    borderColor: '#f1f1f1',
+    borderWidth: 0.4,
+    marginBottom: 10,
+  },
+  uploadImageButton: {
+    marginTop: 5,
+    marginBottom: 20,
+    backgroundColor: '#FE697C',
+    padding: 10,
+    width: '50%',
+    borderRadius: 20,
+  },
 })
 
 export default RegisterFormComponent;
