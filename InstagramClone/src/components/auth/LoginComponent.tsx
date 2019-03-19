@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { View, StyleSheet, Image, KeyboardAvoidingView, SafeAreaView, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Image, KeyboardAvoidingView, SafeAreaView } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch, AnyAction } from 'redux';
 import { NavigationEventsProps } from 'react-navigation';
 
 import LoginFormComponent from './LoginFormComponent';
+import LoaderComponent from '../global/LoaderComponent';
 import { GlobalAppStateType } from '../../redux/defaultState';
 import { User } from '../../helpers/types';
 import { loginUserAction, setErrorMessage, loggedInStatus } from './actions/authActions';
@@ -44,11 +45,7 @@ class LoginComponent extends React.Component<PropsType, {}> {
   render() {
     const { token, tokenFetch } = this.props;
     if (tokenFetch && !token) {
-      return (
-        <View style={styles.test}>
-          <ActivityIndicator size="large" color="red" />
-        </View>
-      )
+      return (<LoaderComponent />)
     }
 
     if (token) {

@@ -6,6 +6,7 @@ import LoginComponent from './src/components/auth/LoginComponent';
 import RegisterComponent from './src/components/auth/RegisterComponent';
 import FeedComponent from './src/components/feed/FeedComponent';
 import ProfileComponent from './src/components/profile/ProfileComponent';
+import UploadComponent from './src/components/upload/UploadComponent';
 
 const bottomNavigator = createBottomTabNavigator({
   Feed: {
@@ -18,7 +19,7 @@ const bottomNavigator = createBottomTabNavigator({
     }
   },
   Feed2: {
-    screen: FeedComponent,
+    screen: UploadComponent,
     navigationOptions: {
       tabBarLabel: 'Upload',
       tabBarIcon: ({tintColor} : any) => (

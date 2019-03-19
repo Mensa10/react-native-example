@@ -137,12 +137,12 @@ export const loggedInStatus: ActionCreator<any> = (nav: any) => {
         body: JSON.stringify({ idToken: token }),
       })
       const userData = await getUserData.json();
-      
       const loggedInUser: User = {
         displayName: userData.users[0].displayName,
         profileImage: { uri: userData.users[0].photoUrl },
         username: userData.users[0].email,
         password: userData.users[0].passwordHash,
+        id: userData.users[0].localId,
       }
       dispatch(loginUser(loggedInUser));
       nav.navigate('Feed');

@@ -21,3 +21,8 @@ export const RegisterSchema = Yup.object().shape({
     .required('Repeat password is required!')
     .oneOf([Yup.ref('password'), null], 'Passwords must match')
 })
+
+export const uploadContentSchema = Yup.object().shape({
+  title: Yup.string()
+    .required('Title is required!')
+})

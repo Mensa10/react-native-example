@@ -1,15 +1,28 @@
 import * as React from 'react';
-import { View, Text, Image, StyleSheet} from 'react-native';
+import { View, Text, Image, StyleSheet, ListRenderItemInfo} from 'react-native';
+import { FeedContent } from '../../helpers/types';
 
 const img = require('../../assets/bg.jpg');
 
-const FeedItemComponent = () => {
+interface PropsType {
+  feed: ListRenderItemInfo<FeedContent>;
+}
+
+const FeedItemComponent = (props: PropsType) => {
+  const { feed } = props;
+  const { item } = feed;
+
+  if (!item) return null;
+
   return (
-    <View style={styles.container}>
-      <Image source={img} style={styles.imageContainer}/>
-      <View style={styles.infoContainer}>
-        <Text>Image desc</Text>
+    <View style={styles.container} key={feed.index}>
+      <View style={styles.userInfoContainer}>
+        <Image source={item.userProfileImg!} style={styles.userInfoProfileImg}/>
         <Text>Added 20.03.2019</Text>
+      </View>
+      <Image source={item.image} style={styles.imageContainer}/>
+      <View style={styles.infoContainer}>
+        <Text>{item.title}</Text>
       </View>
     </View>
   )
@@ -17,15 +30,10 @@ const FeedItemComponent = () => {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 4,
-    borderWidth: 0.5,
-    borderColor: '#d6d7da',
     flexDirection: 'column',
-    elevation: 1,
-    paddingBottom: 10,
-    shadowOffset: { width: 0, height: 0},
-    shadowColor: 'black',
-    shadowOpacity: 0.2,
+    marginBottom: 20,
+    borderBottomColor: '#f1f1f1',
+    borderBottomWidth: 2,
   },
   imageContainer: {
     width: '100%',
@@ -35,6 +43,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 15,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingBottom: 10,
+  },
+  userInfoContainer: {
+    flexDirection: 'row',
+    marginBottom: 10,
+    paddingLeft: 10,
+    justifyContent:"space-between",
+    alignItems: 'center',
+    paddingRight: 10,
+  },
+  userInfoProfileImg: {
+    borderRadius: 20,
+    height: 35,
+    width: 35,
   }
 })
 

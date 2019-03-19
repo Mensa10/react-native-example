@@ -11,3 +11,18 @@ export interface User {
 
   profileImage?: { uri: string };
 }
+
+export interface FeedContent {
+  image: { uri: string };
+
+  title: string;
+
+  tags?: string[] | string;
+
+  createdDate?: number | null;
+
+  userId?: string;
+
+  userProfileImg?: {uri: string};
+}
+

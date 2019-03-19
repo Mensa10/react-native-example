@@ -19,7 +19,6 @@ const ProfileComponent = (props: PropsType) => {
   if (!user) {
     return null;
   }
-  console.log(props.user);
   const logOutAction = () => {
     props.logOut(props.navigation);
   }
