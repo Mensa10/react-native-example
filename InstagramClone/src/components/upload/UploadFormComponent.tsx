@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Text, TextInput, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { Formik } from 'formik';
+import { Text, TextInput, View, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import { Formik, FormikProps } from 'formik';
 import ImagePicker from 'react-native-image-picker';
 
 import { formField, errorText } from '../../helpers';
@@ -9,24 +9,33 @@ import { FeedContent } from '../../helpers/types';
 
 interface PropsType {
   upload: (feed: FeedContent) => void;
+
+  isFetching: boolean;
 }
 
 const UploadFormComponent = (props: PropsType) => {
+  const uploadAction = (values: any, formik: any) => {
+    props.upload(values);
+    formik.setErrors({});
+    formik.setTouched({});
+    formik.setSubmitting(false);
+    formik.resetForm();
+  }
   return (
     <Formik
       initialValues={{ image: { uri: 'https://loremflickr.com/640/360' }, title: '', tags: '' }}
-      onSubmit={values => props.upload(values)}
+      onSubmit={uploadAction}
       validationSchema={uploadContentSchema}
     >
       {formikProps => {
-         const onProfileImageAction = () => {
-          ImagePicker.showImagePicker({maxHeight: 200}, (res: any) => {
+        const onProfileImageAction = () => {
+          ImagePicker.showImagePicker({ maxHeight: 200 }, (res: any) => {
             if (res.didCancel) {
               console.log('User canceled');
             } else if (res.error) {
               alert(res.error);
             } else {
-              const source = { uri: res.uri};
+              const source = { uri: res.uri };
               formikProps.setFieldValue('image', source);
             }
           })
@@ -60,9 +69,16 @@ const UploadFormComponent = (props: PropsType) => {
             {formikProps.errors.tags && formikProps.touched.tags &&
               <Text style={errorText}>{formikProps.errors.tags}</Text>
             }
-            <TouchableOpacity style={styles.loginButton} onPress={formikProps.handleSubmit as any}>
-              <Text style={styles.loginButtonText}>Upload</Text>
-            </TouchableOpacity>
+            {!props.isFetching &&
+              <TouchableOpacity style={styles.loginButton} onPress={formikProps.handleSubmit as any}>
+                <Text style={styles.loginButtonText}>Upload</Text>
+              </TouchableOpacity>
+            }
+            {props.isFetching &&
+              <View style={styles.activityContainer}>
+                <ActivityIndicator size="large" color="#FE697C" />
+              </View>
+            }
           </View>
         )
       }}

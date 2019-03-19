@@ -3,6 +3,7 @@ import { FeedContent } from "../../../helpers/types";
 import { FetchFeedAction } from '../actions/interface';
 import { FETCH_ALL_FEED } from "./types";
 import { GlobalAppStateType } from '../../../redux/defaultState';
+import { toggleIsFetching } from '../../global/actions/globalActions';
 
 import Firebase from '../../../helpers/firebase';
 
@@ -20,15 +21,22 @@ export const getAllFeed: ActionCreator<any> = () => {
 }
 
 
-export const uploadFeed: ActionCreator<any> = (feed: FeedContent) => {
+export const uploadFeed: ActionCreator<any> = (feed: FeedContent, nav: any) => {
   return async (dispatch: Dispatch<AnyAction>, getState: () => GlobalAppStateType) => {
+    dispatch(toggleIsFetching(true));
     const currentUser = getState().auth.user;
     if (currentUser) {
       const fire = new Firebase();
       feed.createdDate = Date.now();
       feed.userId = currentUser.id;
       feed.userProfileImg = currentUser.profileImage;
-      await fire.uploadFeed(feed);
+      try {
+        await fire.uploadFeed(feed);
+        dispatch(toggleIsFetching(false));
+        nav.navigate('Feed');
+      } catch (error) {
+        dispatch(toggleIsFetching(false));
+      }
     }
   }
 }
