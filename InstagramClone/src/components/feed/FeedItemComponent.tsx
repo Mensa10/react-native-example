@@ -13,12 +13,14 @@ const FeedItemComponent = (props: PropsType) => {
   const { item } = feed;
 
   if (!item) return null;
-
+  
+  const uploadedDate = item.createdDate ? new Date(item.createdDate).toLocaleDateString() : new Date().toLocaleDateString();
+  
   return (
     <View style={styles.container} key={feed.index}>
       <View style={styles.userInfoContainer}>
         <Image source={item.userProfileImg!} style={styles.userInfoProfileImg}/>
-        <Text>Added 20.03.2019</Text>
+        <Text>Added - {uploadedDate}</Text>
       </View>
       <Image source={item.image} style={styles.imageContainer}/>
       <View style={styles.infoContainer}>
