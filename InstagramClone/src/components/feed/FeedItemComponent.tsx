@@ -33,9 +33,10 @@ const FeedItemComponent = (props: PropsType) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    marginBottom: 20,
+    marginBottom: 10,
     borderBottomColor: '#f1f1f1',
     borderBottomWidth: 2,
+    marginTop: 20,
   },
   imageContainer: {
     width: '100%',
