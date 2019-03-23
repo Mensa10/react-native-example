@@ -23,7 +23,7 @@ export const getAllFeed: ActionCreator<any> = () => {
 }
 
 
-export const uploadFeed: ActionCreator<any> = (feed: FeedContent, nav: any) => {
+export const uploadFeed: ActionCreator<any> = (feed: FeedContent, nav: any, formik:any) => {
   return async (dispatch: Dispatch<AnyAction>, getState: () => GlobalAppStateType) => {
     dispatch(toggleIsFetching(true));
     const currentUser = getState().auth.user;
@@ -41,6 +41,10 @@ export const uploadFeed: ActionCreator<any> = (feed: FeedContent, nav: any) => {
       try {
         await fire.uploadFeed(feed);
         dispatch(toggleIsFetching(false));
+        formik.setErrors({});
+        formik.setTouched({});
+        formik.setSubmitting(false);
+        formik.resetForm();
         nav.navigate('Feed');
       } catch (error) {
         dispatch(toggleIsFetching(false));

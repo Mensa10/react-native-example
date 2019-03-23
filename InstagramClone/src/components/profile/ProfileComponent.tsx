@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, Button, Image, Text } from 'react-native';
+import { View, StyleSheet, Button, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch, AnyAction } from 'redux';
 import { NavigationInjectedProps } from 'react-navigation';
@@ -10,38 +10,41 @@ import { User } from '../../helpers/types';
 import AsyncImageLoader from '../global/components/AsyncImageLoader';
 
 interface PropsType extends NavigationInjectedProps {
-  logOut: (nav: any) => void;
+  logOut: () => void;
 
   user: User | null;
 }
 
-const ProfileComponent = (props: PropsType) => {
-  const { user, navigation } = props;
-  if (!user) {
-    navigation.navigate('Login');
-    return null;
+class ProfileComponent extends React.PureComponent<PropsType, {}> {
+  componentDidUpdate() {
+    if (!this.props.user) {
+      this.props.navigation.navigate('Login');
+    }
   }
-  const logOutAction = () => {
-    props.logOut(props.navigation);
+  render() {
+    const { user, logOut } = this.props;
+    if (!user) {
+      return null;
+    }
+    return (
+      <View style={styles.container}>
+        <View style={styles.userInfoContainer}>
+          <Text style={styles.userText}>Welcome to your profile <Text style={styles.usernameText}>{user!.displayName}</Text></Text>
+          {user!.profileImage &&
+            <AsyncImageLoader
+              source={user!.profileImage}
+              style={styles.profileImage}
+              placeholder={require('../../assets/profilePlaceholder.jpg')}
+            />
+          }
+          {!user!.profileImage &&
+            <AsyncImageLoader source={require('../../assets/profilePlaceholder.jpg')} style={styles.profileImage} />
+          }
+        </View>
+        <Button title="Logout" onPress={logOut} />
+      </View >
+    )
   }
-  return (
-    <View style={styles.container}>
-      <View style={styles.userInfoContainer}>
-        <Text style={styles.userText}>Welcome to your profile <Text style={styles.usernameText}>{user.displayName}</Text></Text>
-        {user.profileImage &&
-          <AsyncImageLoader
-            source={user.profileImage}
-            style={styles.profileImage}
-            placeholder={require('../../assets/profilePlaceholder.jpg')}
-          />
-        }
-        {!user.profileImage &&
-          <AsyncImageLoader source={require('../../assets/profilePlaceholder.jpg')} style={styles.profileImage} />
-        }
-      </View>
-      <Button title="Logout" onPress={logOutAction} />
-    </View >
-  )
 }
 
 const styles = StyleSheet.create({
@@ -74,8 +77,8 @@ const styles = StyleSheet.create({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({
-  logOut: (nav: any) => {
-    dispatch(logOutUser(nav));
+  logOut: () => {
+    dispatch(logOutUser());
   }
 })
 

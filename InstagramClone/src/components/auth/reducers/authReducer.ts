@@ -37,6 +37,12 @@ export default (
       token: action.token,
       tokenFetch: action.tokenFetch,
     })
+    case types.LOGOUT_USER:
+      return ({
+        ...state,
+        user: null,
+        token: null,
+      })
     default:
       return state;
   }

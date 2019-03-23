@@ -10,14 +10,14 @@ import { uploadFeed } from '../feed/actions/feedActions';
 import { GlobalAppStateType } from '../../redux/defaultState';
 
 interface PropsType extends NavigationInjectedProps {
-  upload: (feed: FeedContent, nav: any) => void;
+  upload: (feed: FeedContent, nav: any, formik: any) => void;
 
   isFetching: boolean;
 }
 
 const UploadComponent = (props: PropsType) => {
-  const uploadAction = (values: any) => {
-    props.upload(values, props.navigation);
+  const uploadAction = (values: any, formik: any) => {
+    props.upload(values, props.navigation, formik);
   }
   return (
     <View style={styles.container}>
@@ -41,8 +41,8 @@ const styles = StyleSheet.create({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({
-  upload: (feed: FeedContent, nav: any) => {
-    dispatch(uploadFeed(feed, nav));
+  upload: (feed: FeedContent, nav: any, formik: any) => {
+    dispatch(uploadFeed(feed, nav, formik));
   }
 });
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Text, TextInput, View, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
-import { Formik } from 'formik';
+import { Formik, FormikProps } from 'formik';
 import ImagePicker from 'react-native-image-picker';
 
 import { formField, errorText } from '../../helpers';
@@ -8,18 +8,14 @@ import { uploadContentSchema } from '../../helpers/validations';
 import { FeedContent } from '../../helpers/types';
 
 interface PropsType {
-  upload: (feed: FeedContent) => void;
+  upload: (feed: FeedContent, formikProps: FormikProps<any>) => void;
 
   isFetching: boolean;
 }
 
 const UploadFormComponent = (props: PropsType) => {
-  const uploadAction = (values: any, formik: any) => {
-    props.upload(values);
-    formik.setErrors({});
-    formik.setTouched({});
-    formik.setSubmitting(false);
-    formik.resetForm();
+  const uploadAction = async (values: any, formik: any) => {
+    props.upload(values, formik);
   }
   return (
     <Formik
@@ -29,7 +25,7 @@ const UploadFormComponent = (props: PropsType) => {
     >
       {formikProps => {
         const onProfileImageAction = () => {
-          ImagePicker.showImagePicker({ maxHeight: 200 }, (res: any) => {
+          ImagePicker.showImagePicker({ quality: 0.5 }, (res: any) => {
             if (res.didCancel) {
               console.log('User canceled');
             } else if (res.error) {

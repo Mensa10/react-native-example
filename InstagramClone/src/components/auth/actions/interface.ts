@@ -20,7 +20,12 @@ export interface SetUserToken {
   tokenFetch: boolean;
 }
 
+export interface LogOutUser {
+  type: 'LOGOUT_USER'
+}
+
 export type AuthActionType =
   | RegisterUser
   | SetErrorMessage
-  | SetUserToken;
+  | SetUserToken
+  | LogOutUser;

@@ -18,6 +18,10 @@ const loginUser = (user: User | null) => ({
   user,
 })
 
+const logOut = () => ({
+  type: types.LOGOUT_USER,
+})
+
 export const setErrorMessage = (error: string | null) => ({
   type: types.SET_ERROR_MESSAGE,
   error,
@@ -153,11 +157,9 @@ export const loggedInStatus: ActionCreator<any> = (nav: any) => {
   }
 }
 
-export const logOutUser: ActionCreator<any> = (nav: any) => {
+export const logOutUser: ActionCreator<any> = () => {
   return async (dispatch: Dispatch<AnyAction>) => {
     await clearStorage();
-    dispatch(loginUser(null));
-    dispatch(setUserToken(null, false));
-    nav.navigate('Login');
+    dispatch(logOut());
   }
 }
