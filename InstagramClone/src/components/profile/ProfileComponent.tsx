@@ -7,6 +7,7 @@ import { NavigationInjectedProps } from 'react-navigation';
 import { logOutUser } from '../auth/actions/authActions';
 import { GlobalAppStateType } from '../../redux/defaultState';
 import { User } from '../../helpers/types';
+import AsyncImageLoader from '../global/components/AsyncImageLoader';
 
 interface PropsType extends NavigationInjectedProps {
   logOut: (nav: any) => void;
@@ -15,8 +16,9 @@ interface PropsType extends NavigationInjectedProps {
 }
 
 const ProfileComponent = (props: PropsType) => {
-  const { user } = props;
+  const { user, navigation } = props;
   if (!user) {
+    navigation.navigate('Login');
     return null;
   }
   const logOutAction = () => {
@@ -24,15 +26,21 @@ const ProfileComponent = (props: PropsType) => {
   }
   return (
     <View style={styles.container}>
-      {user.profileImage &&
-        <Image source={user.profileImage} style={styles.profileImage} />
-      }
-      {!user.profileImage &&
-        <Image source={require('../../assets/profilePlaceholder.jpg')} style={styles.profileImage} />
-      }
-      <Text>{user.displayName}</Text>
+      <View style={styles.userInfoContainer}>
+        <Text style={styles.userText}>Welcome to your profile <Text style={styles.usernameText}>{user.displayName}</Text></Text>
+        {user.profileImage &&
+          <AsyncImageLoader
+            source={user.profileImage}
+            style={styles.profileImage}
+            placeholder={require('../../assets/profilePlaceholder.jpg')}
+          />
+        }
+        {!user.profileImage &&
+          <AsyncImageLoader source={require('../../assets/profilePlaceholder.jpg')} style={styles.profileImage} />
+        }
+      </View>
       <Button title="Logout" onPress={logOutAction} />
-    </View>
+    </View >
   )
 }
 
@@ -49,8 +57,20 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     borderColor: '#f1f1f1',
     borderWidth: 0.4,
-    marginBottom: 10,
+    marginBottom: 40,
   },
+  userText: {
+    fontSize: 20,
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  usernameText: {
+    fontWeight: 'bold',
+  },
+  userInfoContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+  }
 })
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({

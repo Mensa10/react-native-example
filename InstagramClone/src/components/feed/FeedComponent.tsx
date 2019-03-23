@@ -14,6 +14,8 @@ interface PropsType extends NavigationInjectedProps {
   getAll: () => void;
 
   allFeed: FeedContent[] | null;
+
+  isFetching: boolean;
 }
 
 class FeedComponent extends React.PureComponent<PropsType, {}> {
@@ -23,7 +25,7 @@ class FeedComponent extends React.PureComponent<PropsType, {}> {
     })
   }
   render() {
-    const { allFeed } = this.props;
+    const { allFeed, isFetching } = this.props;
 
     if (!allFeed) {
       return <LoaderComponent />;
@@ -35,6 +37,8 @@ class FeedComponent extends React.PureComponent<PropsType, {}> {
           data={allFeed}
           renderItem={(feed) => <FeedItemComponent feed={feed}/>}
           keyExtractor={(feed) => feed.title}
+          refreshing={isFetching}
+          onRefresh={this.props.getAll}
         />
       </SafeAreaView>
     )
@@ -45,18 +49,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-start',
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   }
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({
   getAll: () => {
     dispatch(getAllFeed())
-  }
+  },
 })
 
 const mapStateToProps = (state: GlobalAppStateType) => ({
   allFeed: state.feed.allFeed,
+  isFetching: state.global.fetching,
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(FeedComponent);

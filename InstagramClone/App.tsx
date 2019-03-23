@@ -53,7 +53,7 @@ const feedStackNavigator = createStackNavigator({
   Feed: {
     screen: bottomNavigator,
     navigationOptions: {
-      title: 'test',
+      title: 'InstaClone',
     }
   },
 })

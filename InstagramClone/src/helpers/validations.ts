@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 
 export const LoginSchema = Yup.object().shape({
-  username: Yup.string()
-    .required('Username is required!')
+  email: Yup.string()
+    .required('Email is required!')
     .email('Wrong email format'),
   password: Yup.string()
     .min(6, 'Password has to be longer than 6 characters!')
@@ -10,9 +10,11 @@ export const LoginSchema = Yup.object().shape({
 })
 
 export const RegisterSchema = Yup.object().shape({
-  username: Yup.string()
+  email: Yup.string()
     .required('Email is required!')
     .email('Wrong email format'),
+  displayName: Yup.string()
+    .required('Display name is required!'),
   password: Yup.string()
     .min(6, 'Password has to be longer than 6 characters!')
     .required('Password is required!'),

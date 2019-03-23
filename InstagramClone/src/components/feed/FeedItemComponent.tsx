@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { View, Text, Image, StyleSheet, ListRenderItemInfo} from 'react-native';
+import { View, Text, Image, StyleSheet, ListRenderItemInfo } from 'react-native';
 import { FeedContent } from '../../helpers/types';
+import AsyncImageLoader from '../global/components/AsyncImageLoader';
 
-const img = require('../../assets/bg.jpg');
+const catLoader = require('../../assets/cat1-load.gif');
 
 interface PropsType {
   feed: ListRenderItemInfo<FeedContent>;
@@ -10,19 +11,25 @@ interface PropsType {
 
 const FeedItemComponent = (props: PropsType) => {
   const { feed } = props;
-  const { item } = feed;
+  const { item } = feed;  
 
   if (!item) return null;
-  
+
   const uploadedDate = item.createdDate ? new Date(item.createdDate).toLocaleDateString() : new Date().toLocaleDateString();
-  
   return (
     <View style={styles.container} key={feed.index}>
       <View style={styles.userInfoContainer}>
-        <Image source={item.userProfileImg!} style={styles.userInfoProfileImg}/>
-        <Text>Added - {uploadedDate}</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Image source={item.userProfileImg!} style={styles.userInfoProfileImg} />
+          <Text style={{ fontWeight: 'bold', marginLeft: 10 }}>{item.displayName}</Text>
+        </View>
+        <Text style={{ color: '#a0a0a0' }}>{uploadedDate}</Text>
       </View>
-      <Image source={item.image} style={styles.imageContainer}/>
+      <AsyncImageLoader
+        source={item.image}
+        style={styles.imageContainer}
+        placeholder={catLoader}
+      />
       <View style={styles.infoContainer}>
         <Text>{item.title}</Text>
       </View>
@@ -33,10 +40,9 @@ const FeedItemComponent = (props: PropsType) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    marginBottom: 10,
     borderBottomColor: '#f1f1f1',
-    borderBottomWidth: 2,
-    marginTop: 20,
+    borderBottomWidth: 1,
+    marginTop: 10,
   },
   imageContainer: {
     width: '100%',
@@ -54,7 +60,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 10,
     paddingLeft: 10,
-    justifyContent:"space-between",
+    justifyContent: "space-between",
     alignItems: 'center',
     paddingRight: 10,
   },

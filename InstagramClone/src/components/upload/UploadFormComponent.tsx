@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Text, TextInput, View, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
-import { Formik, FormikProps } from 'formik';
+import { Formik } from 'formik';
 import ImagePicker from 'react-native-image-picker';
 
 import { formField, errorText } from '../../helpers';
@@ -23,7 +23,7 @@ const UploadFormComponent = (props: PropsType) => {
   }
   return (
     <Formik
-      initialValues={{ image: { uri: 'https://loremflickr.com/640/360' }, title: '', tags: '' }}
+      initialValues={{ image: { uri: 'https://loremflickr.com/640/360' }, title: '', }}
       onSubmit={uploadAction}
       validationSchema={uploadContentSchema}
     >
@@ -58,16 +58,6 @@ const UploadFormComponent = (props: PropsType) => {
             />
             {formikProps.errors.title && formikProps.touched.title &&
               <Text style={errorText}>{formikProps.errors.title}</Text>
-            }
-            <TextInput
-              onChangeText={formikProps.handleChange('tags')}
-              onBlur={formikProps.handleBlur('tags')}
-              value={formikProps.values.tags}
-              style={styles.textInput}
-              placeholder="Tags"
-            />
-            {formikProps.errors.tags && formikProps.touched.tags &&
-              <Text style={errorText}>{formikProps.errors.tags}</Text>
             }
             {!props.isFetching &&
               <TouchableOpacity style={styles.loginButton} onPress={formikProps.handleSubmit as any}>

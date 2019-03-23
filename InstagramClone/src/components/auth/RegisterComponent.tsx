@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, Button } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch, AnyAction } from 'redux';
-import { NavigationInjectedProps } from 'react-navigation';
+import { NavigationInjectedProps, NavigationActions } from 'react-navigation';
 
 import RegisterFormComponent from './RegisterFormComponent';
 import { User } from '../../helpers/types';
@@ -24,6 +24,11 @@ class RegisterComponent extends React.PureComponent<PropsType, {}> {
   submitForm = (user: User) => {
     this.props.registerUser(user, this.props.navigation);
   }
+
+  goBack = () => {
+    this.props.navigation.navigate('Login');
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -31,12 +36,13 @@ class RegisterComponent extends React.PureComponent<PropsType, {}> {
           <Text style={styles.headerText}>Register with us</Text>
           <Image source={appLogo} style={styles.headerLogo} />
         </View>
-        <RegisterFormComponent 
+        <RegisterFormComponent  
           submitForm={this.submitForm}
           errorMessage={this.props.errorMessage}
           resetError={this.props.resetError}
           isFetching={this.props.isFetching}
         />
+        <Button title="Back" onPress={this.goBack} />
       </View>
     )
   }

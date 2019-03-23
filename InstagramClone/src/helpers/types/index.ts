@@ -1,7 +1,7 @@
 export interface User {
   id?: string,
 
-  username: string,
+  email: string,
 
   displayName?: string,
 
@@ -17,11 +17,11 @@ export interface FeedContent {
 
   title: string;
 
-  tags?: string[] | string;
-
   createdDate?: number | null;
 
   userId?: string;
+
+  displayName?: string;
 
   userProfileImg?: {uri: string};
 }

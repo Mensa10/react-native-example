@@ -25,13 +25,13 @@ const LoginFormComponent = (props: PropsType) => {
 
   return (
     <Formik
-      initialValues={{ username: '', password: '' }}
+      initialValues={{ email: '', password: '' }}
       onSubmit={values => props.loginUser(values)}
       validationSchema={LoginSchema}
     >
       {formikProps => {
         const usernameOnChange = (text: string) => {
-          formikProps.setFieldValue('username', text)
+          formikProps.setFieldValue('email', text)
           if (formikProps.submitCount > 0) {
             props.resetError();
           }
@@ -47,13 +47,13 @@ const LoginFormComponent = (props: PropsType) => {
           <View style={styles.formContainer}>
             <TextInput
               onChangeText={usernameOnChange}
-              onBlur={formikProps.handleBlur('username')}
-              value={formikProps.values.username}
+              onBlur={formikProps.handleBlur('email')}
+              value={formikProps.values.email}
               style={styles.textInput}
               placeholder="Email"
             />
-            {formikProps.errors.username && formikProps.touched.username &&
-              <Text style={errorText}>{formikProps.errors.username}</Text>
+            {formikProps.errors.email && formikProps.touched.email &&
+              <Text style={errorText}>{formikProps.errors.email}</Text>
             }
             <TextInput
               onChangeText={passwordOnChange}

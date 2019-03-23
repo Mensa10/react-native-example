@@ -33,7 +33,7 @@ export const registerUserAction: ActionCreator<any> = (user: User, nav: any) => 
   return async (dispatch: Dispatch<AnyAction>) => {
     dispatch(toggleIsFetching(true));
     const userDetails = {
-      email: user.username,
+      email: user.email,
       password: user.password,
       returnSecureToken: true,
     }
@@ -46,6 +46,7 @@ export const registerUserAction: ActionCreator<any> = (user: User, nav: any) => 
       if (finalRes.error) {
         if (finalRes.error.message === 'EMAIL_EXISTS') {
           dispatch(setErrorMessage('Email already exists!'))
+          dispatch(toggleIsFetching(false));
         }
         return;
       }
@@ -56,7 +57,7 @@ export const registerUserAction: ActionCreator<any> = (user: User, nav: any) => 
         const profileImgUrl = await new Firebase().uploadImage(user.profileImage!.uri, 'image/jpeg', `${user.id}-profile`);
         const updateUser = {
           idToken: user.id,
-          displayName: 'Mensa10',
+          displayName: user.displayName,
           photoUrl: profileImgUrl,
           returnSecureToken: true,
         }
@@ -79,7 +80,7 @@ export const loginUserAction: ActionCreator<any> = (user: User, nav: any) => {
   return async (dispatch: Dispatch<AnyAction>) => {
     dispatch(toggleIsFetching(true));
     const userDetails = {
-      email: user.username,
+      email: user.email,
       password: user.password,
       returnSecureToken: true,
     }
@@ -140,7 +141,7 @@ export const loggedInStatus: ActionCreator<any> = (nav: any) => {
       const loggedInUser: User = {
         displayName: userData.users[0].displayName,
         profileImage: { uri: userData.users[0].photoUrl },
-        username: userData.users[0].email,
+        email: userData.users[0].email,
         password: userData.users[0].passwordHash,
         id: userData.users[0].localId,
       }

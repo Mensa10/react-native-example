@@ -21,13 +21,13 @@ interface PropsType {
 
 const RegisterFormComponent = (props: PropsType) => (
   <Formik
-    initialValues={{ profileImage:profilePlaceholder, username: '', password: '', repeatPassword: '' }}
+    initialValues={{ profileImage:profilePlaceholder, email: '', displayName: '', password: '', repeatPassword: '' }}
     onSubmit={values => props.submitForm(values)}
     validationSchema={RegisterSchema}
   >
     {formikProps => {
-      const usernameOnChange = (text: string) => {
-        formikProps.setFieldValue('username', text)
+      const emailOnChange = (text: string) => {
+        formikProps.setFieldValue('email', text)
         if (formikProps.submitCount > 0) {
           props.resetError();
         }
@@ -52,14 +52,24 @@ const RegisterFormComponent = (props: PropsType) => (
               <Text style={styles.loginButtonText}>Add profile image</Text>
             </TouchableOpacity>
           <TextInput
-            onChangeText={usernameOnChange}
-            onBlur={formikProps.handleBlur('username')}
-            value={formikProps.values.username}
+            onChangeText={emailOnChange}
+            onBlur={formikProps.handleBlur('email')}
+            value={formikProps.values.email}
             style={styles.textInput}
             placeholder="Email"
           />
-          {formikProps.errors.username && formikProps.touched.password &&
-            <Text style={errorText}>{formikProps.errors.username}</Text>
+          {formikProps.errors.email && formikProps.touched.password &&
+            <Text style={errorText}>{formikProps.errors.email}</Text>
+          }
+          <TextInput
+            onChangeText={formikProps.handleChange('displayName')}
+            onBlur={formikProps.handleBlur('displayName')}
+            value={formikProps.values.displayName}
+            style={styles.textInput}
+            placeholder="Display name"
+          />
+          {formikProps.errors.displayName && formikProps.touched.password &&
+            <Text style={errorText}>{formikProps.errors.displayName}</Text>
           }
           <TextInput
             onChangeText={formikProps.handleChange('password')}
@@ -107,7 +117,8 @@ const RegisterFormComponent = (props: PropsType) => (
 const styles = StyleSheet.create({
   formContainer: {
     alignItems: 'center',
-    width: '100%'
+    width: '100%',
+    marginBottom: 20,
   },
   textInput: formField,
   loginButton: {
