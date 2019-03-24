@@ -96,11 +96,12 @@ export const loginUserAction: ActionCreator<any> = (user: User, nav: any) => {
       const finalRes = await res.json();
       if (finalRes.error) {
         if (finalRes.error.message === 'EMAIL_NOT_FOUND') {
-          dispatch(setErrorMessage('Email not found!'))
+          dispatch(setErrorMessage('Email not found!'));
         }
         if (finalRes.error.message === 'INVALID_PASSWORD') {
           dispatch(setErrorMessage('Invalid password!'))
         }
+        dispatch(toggleIsFetching(false));
         return;
       }
       await storeToken(finalRes.idToken);

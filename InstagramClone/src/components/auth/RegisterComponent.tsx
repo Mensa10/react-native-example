@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, Image, Button } from 'react-native';
+import { View, Text, StyleSheet, Image, Button, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch, AnyAction } from 'redux';
-import { NavigationInjectedProps, NavigationActions } from 'react-navigation';
+import { NavigationInjectedProps } from 'react-navigation';
 
 import RegisterFormComponent from './RegisterFormComponent';
 import { User } from '../../helpers/types';
@@ -31,19 +31,21 @@ class RegisterComponent extends React.PureComponent<PropsType, {}> {
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.headerContainer}>
-          <Text style={styles.headerText}>Register with us</Text>
-          <Image source={appLogo} style={styles.headerLogo} />
+      <ScrollView>
+        <View style={styles.container}>
+          <View style={styles.headerContainer}>
+            <Text style={styles.headerText}>Register with us</Text>
+            <Image source={appLogo} style={styles.headerLogo} />
+          </View>
+          <RegisterFormComponent
+            submitForm={this.submitForm}
+            errorMessage={this.props.errorMessage}
+            resetError={this.props.resetError}
+            isFetching={this.props.isFetching}
+          />
+          <Button title="Back" onPress={this.goBack} />
         </View>
-        <RegisterFormComponent  
-          submitForm={this.submitForm}
-          errorMessage={this.props.errorMessage}
-          resetError={this.props.resetError}
-          isFetching={this.props.isFetching}
-        />
-        <Button title="Back" onPress={this.goBack} />
-      </View>
+      </ScrollView>
     )
   }
 };
@@ -54,6 +56,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#f1f1f1',
+    paddingTop:20,
+    paddingBottom: 20,
   },
   headerContainer: {
     flexDirection: 'row',

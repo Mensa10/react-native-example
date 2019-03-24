@@ -1,5 +1,4 @@
 import { ActionCreator, Dispatch, AnyAction } from 'redux';
-import { FormikProps } from 'formik';
 
 import { FeedContent } from "../../../helpers/types";
 import { FetchFeedAction } from '../actions/interface';
@@ -25,7 +24,7 @@ export const getAllFeed: ActionCreator<any> = () => {
 }
 
 
-export const uploadFeed: ActionCreator<any> = (feed: FeedContent, nav: any, formik: FormikProps<any>) => {
+export const uploadFeed: ActionCreator<any> = (feed: FeedContent, nav: any) => {
   return async (dispatch: Dispatch<AnyAction>, getState: () => GlobalAppStateType) => {
     dispatch(toggleIsFetching(true));
     const currentUser = getState().auth.user;
@@ -41,6 +40,7 @@ export const uploadFeed: ActionCreator<any> = (feed: FeedContent, nav: any, form
           image: { uri: uploadImage },
           title: feed.title,
         }
+
         await fire.uploadFeed(feedToUpload);
         dispatch(toggleIsFetching(false));
         nav.navigate('Feed');

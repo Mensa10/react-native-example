@@ -20,7 +20,7 @@ export default class Firebase {
 
   uploadFeed = async (feed: FeedContent) => {
     try {
-      const db = firebase.app().database!().ref('feed').child(feed.userId!);
+      const db = firebase.app().database!().ref('feed').child(`${feed.displayName!}`);
       await db.push(feed);
     } catch (error) {
       throw error;
