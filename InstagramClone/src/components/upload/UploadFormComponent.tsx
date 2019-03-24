@@ -8,19 +8,21 @@ import { uploadContentSchema } from '../../helpers/validations';
 import { FeedContent } from '../../helpers/types';
 
 interface PropsType {
-  upload: (feed: FeedContent, formikProps: FormikProps<any>) => void;
+  upload: (feed: FeedContent) => void;
 
   isFetching: boolean;
+
+  navigation: any;
 }
 
 const UploadFormComponent = (props: PropsType) => {
-  const uploadAction = async (values: any, formik: any) => {
-    props.upload(values, formik);
+  const uploadAction = async (values: any) => {
+    props.upload(values);
   }
   return (
     <Formik
       initialValues={{ image: { uri: 'https://loremflickr.com/640/360' }, title: '', }}
-      onSubmit={uploadAction}
+      onSubmit={values => uploadAction(values)}
       validationSchema={uploadContentSchema}
     >
       {formikProps => {
@@ -36,6 +38,13 @@ const UploadFormComponent = (props: PropsType) => {
             }
           })
         }
+
+        props.navigation.addListener('willFocus', () => {
+          formikProps.resetForm({image: { uri: 'https://loremflickr.com/640/360' }, title: '',});
+          formikProps.setStatus({title: '' });
+          formikProps.setTouched({});
+        })
+
         return (
           <View style={styles.formContainer}>
             <Image source={formikProps.values.image} style={styles.profileImage} />

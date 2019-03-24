@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, Text } from 'react-native';
 import { Dispatch, AnyAction } from 'redux';
 import { connect } from 'react-redux';
 import { NavigationInjectedProps } from 'react-navigation';
@@ -10,21 +10,28 @@ import { uploadFeed } from '../feed/actions/feedActions';
 import { GlobalAppStateType } from '../../redux/defaultState';
 
 interface PropsType extends NavigationInjectedProps {
-  upload: (feed: FeedContent, nav: any, formik: any) => void;
+  upload: (feed: FeedContent, nav: any) => void;
 
   isFetching: boolean;
 }
 
-const UploadComponent = (props: PropsType) => {
-  const uploadAction = (values: any, formik: any) => {
-    props.upload(values, props.navigation, formik);
+class UploadComponent extends React.PureComponent<PropsType, {}> {
+  uploadAction = (values: any) => {
+    this.props.upload(values, this.props.navigation);
   }
-  return (
-    <View style={styles.container}>
-      <Text style={styles.textStyle}>Upload your content</Text>
-      <UploadFormComponent upload={uploadAction} isFetching={props.isFetching} />
-    </View>
-  )
+
+  render() {
+    return (
+      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+        <Text style={styles.textStyle}>Upload your content</Text>
+        <UploadFormComponent 
+          upload={this.uploadAction} 
+          isFetching={this.props.isFetching} 
+          navigation={this.props.navigation}
+          />
+      </KeyboardAvoidingView>
+    )
+  }
 };
 
 const styles = StyleSheet.create({
@@ -41,8 +48,8 @@ const styles = StyleSheet.create({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({
-  upload: (feed: FeedContent, nav: any, formik: any) => {
-    dispatch(uploadFeed(feed, nav, formik));
+  upload: (feed: FeedContent, nav: any) => {
+    dispatch(uploadFeed(feed, nav));
   }
 });
 

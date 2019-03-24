@@ -58,7 +58,7 @@ export const registerUserAction: ActionCreator<any> = (user: User, nav: any) => 
       user.id = finalRes.idToken;
       await storeToken(finalRes.idToken);
       if (user.profileImage) {
-        const profileImgUrl = await new Firebase().uploadImage(user.profileImage!.uri, 'image/jpeg', `${user.id}-profile`);
+        const profileImgUrl = await new Firebase().uploadFile(user.profileImage.uri);
         const updateUser = {
           idToken: user.id,
           displayName: user.displayName,

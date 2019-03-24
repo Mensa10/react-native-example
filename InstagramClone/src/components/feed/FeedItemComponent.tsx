@@ -4,6 +4,7 @@ import { FeedContent } from '../../helpers/types';
 import AsyncImageLoader from '../global/components/AsyncImageLoader';
 
 const catLoader = require('../../assets/cat1-load.gif');
+const profilePlaceholder = require('../../assets/profilePlaceholder.jpg');
 
 interface PropsType {
   feed: ListRenderItemInfo<FeedContent>;
@@ -16,11 +17,12 @@ const FeedItemComponent = (props: PropsType) => {
   if (!item) return null;
 
   const uploadedDate = item.createdDate ? new Date(item.createdDate).toLocaleDateString() : new Date().toLocaleDateString();
+  const profileImg = item.userProfileImg!.uri ? item.userProfileImg : profilePlaceholder;
   return (
     <View style={styles.container} key={feed.index}>
       <View style={styles.userInfoContainer}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Image source={item.userProfileImg!} style={styles.userInfoProfileImg} />
+          <Image source={profileImg} style={styles.userInfoProfileImg} />
           <Text style={{ fontWeight: 'bold', marginLeft: 10 }}>{item.displayName}</Text>
         </View>
         <Text style={{ color: '#a0a0a0' }}>{uploadedDate}</Text>

@@ -1,4 +1,6 @@
 import { ActionCreator, Dispatch, AnyAction } from 'redux';
+import { FormikProps } from 'formik';
+
 import { FeedContent } from "../../../helpers/types";
 import { FetchFeedAction } from '../actions/interface';
 import { FETCH_ALL_FEED } from "./types";
@@ -23,30 +25,27 @@ export const getAllFeed: ActionCreator<any> = () => {
 }
 
 
-export const uploadFeed: ActionCreator<any> = (feed: FeedContent, nav: any, formik:any) => {
+export const uploadFeed: ActionCreator<any> = (feed: FeedContent, nav: any, formik: FormikProps<any>) => {
   return async (dispatch: Dispatch<AnyAction>, getState: () => GlobalAppStateType) => {
     dispatch(toggleIsFetching(true));
     const currentUser = getState().auth.user;
     if (currentUser) {
-      const fire = new Firebase();
-      const uploadImage = await fire.uploadImage(feed.image.uri, 'image/jpeg', `${currentUser.id}-uploadImg`);
-      console.log(uploadImage);
-      feed.createdDate = Date.now();
-      feed.userId = currentUser.id;
-      feed.userProfileImg = currentUser.profileImage;
-      feed.displayName = currentUser.displayName;
-      if (uploadImage) {
-        feed.image.uri = uploadImage as string;
-      }
       try {
-        await fire.uploadFeed(feed);
+        const fire = new Firebase();
+        const uploadImage = await fire.uploadFile(feed.image.uri);
+        const feedToUpload: FeedContent = {
+          createdDate: Date.now(),
+          userId: currentUser.id,
+          userProfileImg: { uri: currentUser.profileImage!.uri ? currentUser.profileImage!.uri : '' },
+          displayName: currentUser.displayName,
+          image: { uri: uploadImage },
+          title: feed.title,
+        }
+        await fire.uploadFeed(feedToUpload);
         dispatch(toggleIsFetching(false));
-        formik.setErrors({});
-        formik.setTouched({});
-        formik.setSubmitting(false);
-        formik.resetForm();
         nav.navigate('Feed');
       } catch (error) {
+        console.log(error);
         dispatch(toggleIsFetching(false));
       }
     }

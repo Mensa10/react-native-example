@@ -15,12 +15,15 @@ w.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
 w.Blob = Blob;
 
 export default class Firebase {
+  private cloudinaryName = 'dthd6s5qg';
+  private cloudinaryUrl = `https://api.cloudinary.com/v1_1/${this.cloudinaryName}/image/upload`
+
   uploadFeed = async (feed: FeedContent) => {
     try {
       const db = firebase.app().database!().ref('feed').child(feed.userId!);
-      const res = await db.push(feed);
+      await db.push(feed);
     } catch (error) {
-      //Todo
+      throw error;
     }
   }
 
@@ -42,37 +45,35 @@ export default class Firebase {
       })
       return responseArray;
     } catch (error) {
-      
+
     }
   }
 
-  uploadImage = (uri: string, mime = 'image/jpeg', name: string) => {
+  uploadFile = async (uri: string) => {
+    const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
+    const regex = new RegExp("^(http|https)://", "i");
+    const data = new FormData();
 
-    return new Promise((resolve, reject) => {
-      let imgUri = uri; 
-      let uploadBlob: any = null;
-      const uploadUri = Platform.OS === 'ios' ? imgUri.replace('file://', '') : imgUri;
-      const imageRef = firebase.app().storage!(`gs://instagram-clone-85e2c.appspot.com/`).ref(name);
-      
-      fs.readFile(uploadUri, 'base64')
-        .then(data => {
-          const b = Blob as any;
-          return b.build(data, { type: `${mime};BASE64` });
-        })
-        .then(blob => {
-          uploadBlob = blob;
-          return imageRef.put(blob, { contentType: mime });
-        })
-        .then(() => {
-          uploadBlob.close()
-          return imageRef.getDownloadURL();
-        })
-        .then(url => {
-          resolve(url);
-        })
-        .catch(error => {
-          reject(error)
-      })
-    })
+    try {
+      let file;
+      if (regex.test(uri)) {
+        file = uri;
+        data.append('file', file);;
+      } else {
+        file = await fs.readFile(uploadUri, 'base64');
+        data.append('file', `data:text/plain;base64,${file}`);;
+      }
+
+      data.append('upload_preset', 'bzcuonne');
+      const response = await fetch(this.cloudinaryUrl, {
+        method: 'POST',
+        body: data,
+      });
+      const imgUrl = await response.json();
+      return imgUrl.url;
+    } catch (error) {
+      throw error;
+    }
   }
 }
+
