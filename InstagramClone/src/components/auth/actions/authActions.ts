@@ -54,23 +54,24 @@ export const registerUserAction: ActionCreator<any> = (user: User, nav: any) => 
         }
         return;
       }
-      dispatch(setUserToken(finalRes.idToken, false));
       user.id = finalRes.idToken;
-      await storeToken(finalRes.idToken);
-      if (user.profileImage) {
-        const profileImgUrl = await new Firebase().uploadFile(user.profileImage.uri);
-        const updateUser = {
-          idToken: user.id,
-          displayName: user.displayName,
-          photoUrl: profileImgUrl,
-          returnSecureToken: true,
-        }
-        await fetch(updateUserUrl, {
-          method: 'POST',
-          body: JSON.stringify(updateUser),
-        })
+      let profileImgUrl = '';
+      if (user.profileImage!.uri) {
+        profileImgUrl = await new Firebase().uploadFile(user.profileImage!.uri);
       }
+      const updateUser = {
+        idToken: user.id,
+        displayName: user.displayName,
+        photoUrl: profileImgUrl,
+        returnSecureToken: true,
+      }
+      await fetch(updateUserUrl, {
+        method: 'POST',
+        body: JSON.stringify(updateUser),
+      })
+      await storeToken(finalRes.idToken);
       dispatch(toggleIsFetching(false));
+      dispatch(setUserToken(finalRes.idToken, false));
       dispatch(loginUser(user))
       nav.navigate('Feed');
     } catch (error) {

@@ -50,6 +50,7 @@ export default class Firebase {
   }
 
   uploadFile = async (uri: string) => {
+    if (!uri) return;
     const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
     const regex = new RegExp("^(http|https)://", "i");
     const data = new FormData();

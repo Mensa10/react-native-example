@@ -46,6 +46,7 @@ export const uploadFeed: ActionCreator<any> = (feed: FeedContent, nav: any) => {
         nav.navigate('Feed');
       } catch (error) {
         console.log(error);
+        alert(error);
         dispatch(toggleIsFetching(false));
       }
     }
