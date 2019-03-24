@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, Animated } from 'react-native';
+import { Animated } from 'react-native';
 
 class AsyncImageLoader extends React.PureComponent<any, {}> {
   state = {
@@ -18,11 +18,15 @@ class AsyncImageLoader extends React.PureComponent<any, {}> {
 
   render() {
     const { loading } = this.state;
+    let src = this.props.source;
+    if (!loading) {
+      src = this.props.source.uri === '' ? this.props.placeholder : this.props.source;
+    }
 
     return (
       <Animated.Image 
         onLoad={this.onLoad}
-        source={loading ? this.props.placeholder : this.props.source}
+        source={loading ? this.props.placeholder : src}
         style={[
           {
             opacity: this.state.opacity,

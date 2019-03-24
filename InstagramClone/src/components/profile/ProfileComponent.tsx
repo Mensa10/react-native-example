@@ -30,14 +30,14 @@ class ProfileComponent extends React.PureComponent<PropsType, {}> {
       <View style={styles.container}>
         <View style={styles.userInfoContainer}>
           <Text style={styles.userText}>Welcome to your profile <Text style={styles.usernameText}>{user!.displayName}</Text></Text>
-          {user!.profileImage!.uri !== '' &&
+          {user.profileImage.uri != '' &&
             <AsyncImageLoader
-              source={user!.profileImage}
+              source={user.profileImage}
               style={styles.profileImage}
               placeholder={require('../../assets/profilePlaceholder.jpg')}
             />
           }
-          {user.profileImage!.uri === '' &&
+          {user.profileImage.uri === '' &&
             <AsyncImageLoader source={require('../../assets/profilePlaceholder.jpg')} style={styles.profileImage} />
           }
         </View>

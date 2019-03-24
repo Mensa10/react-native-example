@@ -9,7 +9,7 @@ export interface User {
 
   repeatPassword?: string;
 
-  profileImage?: { uri: string };
+  profileImage: { uri: string };
 }
 
 export interface FeedContent {
@@ -23,6 +23,6 @@ export interface FeedContent {
 
   displayName?: string;
 
-  userProfileImg?: {uri: string};
+  userProfileImg: { uri: string };
 }
 
