@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { createBottomTabNavigator, createAppContainer, createSwitchNavigator, createStackNavigator } from 'react-navigation';
+import { createMaterialTopTabNavigator, createAppContainer, createSwitchNavigator, createStackNavigator } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import LoginComponent from './src/components/auth/LoginComponent';
@@ -11,7 +11,7 @@ import UploadComponent from './src/components/upload/UploadComponent';
 
 
 
-const bottomNavigator = createBottomTabNavigator({
+const bottomNavigator = createMaterialTopTabNavigator({
   Feed: {
     screen: FeedComponent,
     navigationOptions: {
@@ -41,10 +41,16 @@ const bottomNavigator = createBottomTabNavigator({
   },
 }, {
     initialRouteName: 'Feed',
+    tabBarPosition: 'bottom',
     order: ['Feed2', 'Feed', 'Feed3'],
+    swipeEnabled: true,
     tabBarOptions: {
       activeTintColor: '#FE697C',
       inactiveTintColor: '#ccc',
+      showIcon: true,
+      style: {
+        backgroundColor: '#fff',
+      }
     },
   })
 

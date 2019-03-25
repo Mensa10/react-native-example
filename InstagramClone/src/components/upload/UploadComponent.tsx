@@ -24,11 +24,11 @@ class UploadComponent extends React.PureComponent<PropsType, {}> {
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
         <Text style={styles.textStyle}>Upload your content</Text>
-        <UploadFormComponent 
-          upload={this.uploadAction} 
-          isFetching={this.props.isFetching} 
+        <UploadFormComponent
+          upload={this.uploadAction}
+          isFetching={this.props.isFetching}
           navigation={this.props.navigation}
-          />
+        />
       </KeyboardAvoidingView>
     )
   }
@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
   textStyle: {
     fontSize: 32,
     marginBottom: 20,
+    marginTop: 40,
   }
 })
 

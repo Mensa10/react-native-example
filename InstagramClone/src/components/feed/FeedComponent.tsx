@@ -30,12 +30,15 @@ class FeedComponent extends React.PureComponent<PropsType, {}> {
     if (!allFeed) {
       return <LoaderComponent />;
     }
+    allFeed.sort((a, b) => {
+      return new Date(b.createdDate) as any - (new Date(a.createdDate) as any);
+    })
 
     return (
       <SafeAreaView style={styles.container}>
-        <FlatList 
+        <FlatList
           data={allFeed}
-          renderItem={(feed) => <FeedItemComponent feed={feed}/>}
+          renderItem={(feed) => <FeedItemComponent feed={feed} />}
           keyExtractor={(feed) => feed.title}
           refreshing={isFetching}
           onRefresh={this.props.getAll}

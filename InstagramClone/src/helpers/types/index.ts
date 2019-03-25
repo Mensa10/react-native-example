@@ -17,7 +17,7 @@ export interface FeedContent {
 
   title: string;
 
-  createdDate?: number | null;
+  createdDate: number;
 
   userId?: string;
 

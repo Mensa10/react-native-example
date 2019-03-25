@@ -84,7 +84,7 @@ const UploadFormComponent = (props: PropsType) => {
 const styles = StyleSheet.create({
   formContainer: {
     alignItems: 'center',
-    width: '100%'
+    width: '100%',
   },
   textInput: formField,
   loginButton: {
