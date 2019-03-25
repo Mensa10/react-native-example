@@ -32,16 +32,15 @@ export const uploadFeed: ActionCreator<any> = (feed: FeedContent, nav: any) => {
       try {
         const fire = new Firebase();
         const uploadImage = await fire.uploadFile(feed.image.uri);
+        const imageData = await JSON.parse(uploadImage);
         const feedToUpload: FeedContent = {
           createdDate: Date.now(),
           userId: currentUser.id,
           userProfileImg: { uri: currentUser.profileImage.uri ? currentUser.profileImage.uri : '' },
           displayName: currentUser.displayName,
-          image: { uri: uploadImage },
+          image: { uri: imageData.url },
           title: feed.title,
         }
-        alert(feedToUpload.image.uri);
-        alert(feedToUpload.userProfileImg.uri);
         await fire.uploadFeed(feedToUpload);
         dispatch(toggleIsFetching(false));
         nav.navigate('Feed');

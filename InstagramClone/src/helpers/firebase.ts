@@ -1,4 +1,3 @@
-import { Platform } from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
 import { firebase } from '@firebase/app'
 import '@firebase/auth';
@@ -15,8 +14,7 @@ w.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
 w.Blob = Blob;
 
 export default class Firebase {
-  private cloudinaryName = 'dthd6s5qg';
-  private cloudinaryUrl = `https://api.cloudinary.com/v1_1/${this.cloudinaryName}/image/upload`
+  private cloudinaryUrl = `https://api.cloudinary.com/v1_1/ministry-of-programming/image/upload`
 
   uploadFeed = async (feed: FeedContent) => {
     try {
@@ -51,27 +49,25 @@ export default class Firebase {
 
   uploadFile = async (uri: string) => {
     if (!uri) return;
-    const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
+    const uploadUri = uri.replace('file://', '');
     const regex = new RegExp("^(http|https)://", "i");
-    const data = new FormData();
+    const formData = [{ name: 'upload_preset', data: 'j6c51ecn' }];
 
     try {
       let file;
       if (regex.test(uri)) {
         file = uri;
-        data.append('file', file);;
+        formData.push({ name: 'file', data: file })
       } else {
         file = await fs.readFile(uploadUri, 'base64');
-        data.append('file', `data:text/plain;base64,${file}`);;
+        formData.push({ name: 'file', data: `data:text/plain;base64,${file}` });
       }
 
-      data.append('upload_preset', 'bzcuonne');
-      const response = await fetch(this.cloudinaryUrl, {
-        method: 'POST',
-        body: data,
-      });
-      const imgUrl = await response.json();
-      return imgUrl.url;
+      const request = await RNFetchBlob.fetch('POST', this.cloudinaryUrl, {
+        'Content-Type': 'multipart/form-data'
+      }, formData)
+
+      return request.data;
     } catch (error) {
       throw error;
     }

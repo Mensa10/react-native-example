@@ -27,7 +27,7 @@ const UploadFormComponent = (props: PropsType) => {
     >
       {formikProps => {
         const onProfileImageAction = () => {
-          ImagePicker.showImagePicker({ quality: 0.5 }, (res: any) => {
+          ImagePicker.showImagePicker({ quality: 0.5, maxHeight: 640, maxWidth: 320 }, (res: any) => {
             if (res.didCancel) {
               console.log('User canceled');
             } else if (res.error) {
