@@ -31,21 +31,21 @@ class RegisterComponent extends React.PureComponent<PropsType, {}> {
 
   render() {
     return (
-      <ScrollView>
-        <View style={styles.container}>
-          <View style={styles.headerContainer}>
-            <Text style={styles.headerText}>Register with us</Text>
-            <Image source={appLogo} style={styles.headerLogo} />
-          </View>
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <Text style={styles.headerText}>Register with us</Text>
+          <Image source={appLogo} style={styles.headerLogo} />
+        </View>
+        <ScrollView style={{ width: '100%' }}>
           <RegisterFormComponent
             submitForm={this.submitForm}
             errorMessage={this.props.errorMessage}
             resetError={this.props.resetError}
             isFetching={this.props.isFetching}
           />
-          <Button title="Back" onPress={this.goBack} />
-        </View>
-      </ScrollView>
+        </ScrollView>
+        <Button title="Back" onPress={this.goBack} />
+      </View>
     )
   }
 };
@@ -56,13 +56,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#f1f1f1',
-    paddingTop:20,
+    paddingTop: 20,
     paddingBottom: 20,
   },
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 30,
+    marginTop: 30,
   },
   headerText: {
     textAlign: 'center',
