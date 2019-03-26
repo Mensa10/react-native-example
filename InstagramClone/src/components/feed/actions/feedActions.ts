@@ -1,4 +1,5 @@
 import { ActionCreator, Dispatch, AnyAction } from 'redux';
+import { Alert } from 'react-native';
 
 import { FeedContent } from "../../../helpers/types";
 import { FetchFeedAction } from '../actions/interface';
@@ -43,7 +44,11 @@ export const uploadFeed: ActionCreator<any> = (feed: FeedContent, nav: any) => {
         }
         await fire.uploadFeed(feedToUpload);
         dispatch(toggleIsFetching(false));
-        nav.navigate('Feed');
+        Alert.alert('Upload info', 'Successfully uploaded content!', [
+          {
+            text: 'OK', onPress: () => nav.navigate('Feed')
+          }
+        ])
       } catch (error) {
         console.log(error);
         alert(error);

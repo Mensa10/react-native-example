@@ -4,6 +4,8 @@ export interface RegisterUser {
   type: 'REGISTER_USER';
 
   user: User;
+
+  firstLogin: boolean;
 }
 
 export interface SetErrorMessage {
@@ -24,8 +26,13 @@ export interface LogOutUser {
   type: 'LOGOUT_USER'
 }
 
+export interface ToggleRegisterModal {
+  type: 'TOGGLE_REGISTER_MODAL'
+}
+
 export type AuthActionType =
   | RegisterUser
   | SetErrorMessage
   | SetUserToken
-  | LogOutUser;
+  | LogOutUser
+  | ToggleRegisterModal;

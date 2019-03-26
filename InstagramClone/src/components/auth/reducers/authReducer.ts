@@ -25,6 +25,7 @@ export default (
       return ({
         ...state,
         user: action.user,
+        firstLogin: action.firstLogin,
       });
     case types.SET_ERROR_MESSAGE:
     return ({
@@ -42,6 +43,11 @@ export default (
         ...state,
         user: null,
         token: null,
+      })
+    case types.TOGGLE_REGISTER_MODAL:
+      return ({
+        ...state,
+        firstLogin: false,
       })
     default:
       return state;

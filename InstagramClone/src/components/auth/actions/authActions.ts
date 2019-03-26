@@ -13,13 +13,18 @@ const loginUrl = `https://www.googleapis.com/identitytoolkit/v3/relyingparty/ver
 const updateUserUrl = `https://www.googleapis.com/identitytoolkit/v3/relyingparty/setAccountInfo?key=${apiKey}`
 const getUserDataUrl = `https://www.googleapis.com/identitytoolkit/v3/relyingparty/getAccountInfo?key=${apiKey}`
 
-const loginUser = (user: User | null) => ({
+const loginUser = (user: User | null, firstLogin: boolean = false) => ({
   type: types.REGISTER_USER,
   user,
+  firstLogin,
 })
 
 const logOut = () => ({
   type: types.LOGOUT_USER,
+})
+
+export const toggleRegisterModal = () => ({
+  type: types.TOGGLE_REGISTER_MODAL
 })
 
 export const setErrorMessage = (error: string | null) => ({
@@ -74,7 +79,7 @@ export const registerUserAction: ActionCreator<any> = (user: User, nav: any) => 
       await storeToken(finalRes.idToken);
       dispatch(toggleIsFetching(false));
       dispatch(setUserToken(finalRes.idToken, false));
-      dispatch(loginUser(user))
+      dispatch(loginUser(user, true))
       nav.navigate('Feed');
     } catch (error) {
       console.log(error);
